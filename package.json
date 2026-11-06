@@ -1,0 +1,45 @@
+{
+  "name": "malati-group-recruitment-portal",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Malati Group recruitment portal — candidate applications and configurable admin.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "seed": "tsx scripts/seed.ts",
+    "hash-password": "tsx scripts/hash-password.ts",
+    "reset:data": "tsx scripts/reset-local-data.ts",
+    "smoke": "tsx scripts/smoke-test.ts",
+    "verify:google": "tsx scripts/verify-google-sync.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "3.0.3",
+    "clsx": "2.1.1",
+    "googleapis": "189.0.0",
+    "jose": "6.2.15",
+    "lucide-react": "1.70.0",
+    "next": "16.4.5",
+    "nodemailer": "10.3.1",
+    "qrcode": "1.5.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.4",
+    "@types/node": "24.10.1",
+    "@types/nodemailer": "7.0.4",
+    "@types/qrcode": "1.5.6",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.7",
+    "dotenv": "17.2.3",
+    "eslint": "9.39.1",
+    "eslint-config-next": "16.4.5",
+    "tailwindcss": "4.3.4",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}

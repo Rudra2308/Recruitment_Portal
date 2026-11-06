@@ -2,13 +2,23 @@ import type { MetadataRoute } from "next";
 import { getBaseUrl } from "@/lib/config";
 import { getPublicPositions } from "@/lib/data/jobs";
 import { getActiveDepartments } from "@/lib/data/departments";
+import type { Position, Department } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl();
-  const [positions, departments] = await Promise.all([
-    getPublicPositions(),
-    getActiveDepartments(),
-  ]);
+  let positions: Position[] = [];
+  let departments: Department[] = [];
+
+  try {
+    [positions, departments] = await Promise.all([
+      getPublicPositions(),
+      getActiveDepartments(),
+    ]);
+  } catch (err) {
+    console.warn("Could not fetch positions/departments during sitemap generation:", err);
+  }
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {

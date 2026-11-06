@@ -64,7 +64,7 @@ export async function seedIfEmpty(store: DataStore): Promise<void> {
   const defaults = { ...DEFAULT_SETTINGS, ...buildSeedSettings() };
   const missingSettings: Record<string, string> = {};
   for (const [key, value] of Object.entries(defaults)) {
-    if (existingSettings[key] === undefined || existingSettings[key] === "") {
+    if (value !== undefined && (existingSettings[key] === undefined || existingSettings[key] === "")) {
       missingSettings[key] = value;
     }
   }

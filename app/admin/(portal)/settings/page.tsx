@@ -117,17 +117,17 @@ export default async function AdminSettingsPage() {
                 </div>
 
                 <div className="border-t border-line pt-5">
-                  <h3 className="text-[13px] font-semibold text-ink">
-                    Candidate Landing Page Copy
+                  <h3 className="text-[14px] font-semibold text-ink">
+                    Candidate Homepage — Hero Section
                   </h3>
                   <p className="mt-0.5 text-[11.5px] text-muted">
-                    Customise the main title and introduction seen by candidates.
+                    Customise the main title, introduction, and quick highlight tags seen at the top of the homepage.
                   </p>
                 </div>
 
                 <div>
                   <label htmlFor="hero_heading" className="label">
-                    Headline <span className="text-brand">*</span>
+                    Main Headline <span className="text-brand">*</span>
                   </label>
                   <input
                     id="hero_heading"
@@ -162,6 +162,260 @@ export default async function AdminSettingsPage() {
                     rows={3}
                     className="textarea"
                   />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="hero_tag1" className="label">
+                      Highlight Tag 1
+                    </label>
+                    <input
+                      id="hero_tag1"
+                      name="hero_tag1"
+                      defaultValue={settings.hero_tag1 || "No Account Required"}
+                      className="input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="hero_tag2" className="label">
+                      Highlight Tag 2
+                    </label>
+                    <input
+                      id="hero_tag2"
+                      name="hero_tag2"
+                      defaultValue={settings.hero_tag2 || "Apply in 2 Minutes"}
+                      className="input"
+                    />
+                  </div>
+                </div>
+
+                <div className="border-t border-line pt-5">
+                  <h3 className="text-[14px] font-semibold text-ink">
+                    Candidate Homepage — Open Positions Section
+                  </h3>
+                  <p className="mt-0.5 text-[11.5px] text-muted">
+                    Customise the title and subtitle shown above the job openings browser.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="positions_heading" className="label">
+                      Positions Title
+                    </label>
+                    <input
+                      id="positions_heading"
+                      name="positions_heading"
+                      defaultValue={settings.positions_heading || "Open Positions"}
+                      className="input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="positions_subheading" className="label">
+                      Positions Subtitle
+                    </label>
+                    <input
+                      id="positions_subheading"
+                      name="positions_subheading"
+                      defaultValue={
+                        settings.positions_subheading ||
+                        "Select a role to view detailed responsibilities and submit your application."
+                      }
+                      className="input"
+                    />
+                  </div>
+                </div>
+
+                <div className="border-t border-line pt-5">
+                  <h3 className="text-[14px] font-semibold text-ink">
+                    Candidate Homepage — Departments Section
+                  </h3>
+                  <p className="mt-0.5 text-[11.5px] text-muted">
+                    Customise the headers for the hiring departments grid.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <label htmlFor="departments_eyebrow" className="label">
+                      Eyebrow / Small Header
+                    </label>
+                    <input
+                      id="departments_eyebrow"
+                      name="departments_eyebrow"
+                      defaultValue={settings.departments_eyebrow || "Explore Functions"}
+                      className="input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="departments_heading" className="label">
+                      Section Title
+                    </label>
+                    <input
+                      id="departments_heading"
+                      name="departments_heading"
+                      defaultValue={settings.departments_heading || "Hiring Departments"}
+                      className="input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="departments_link_text" className="label">
+                      View All Link Label
+                    </label>
+                    <input
+                      id="departments_link_text"
+                      name="departments_link_text"
+                      defaultValue={settings.departments_link_text || "View all departments"}
+                      className="input"
+                    />
+                  </div>
+                </div>
+
+                <div className="border-t border-line pt-5">
+                  <h3 className="text-[14px] font-semibold text-ink">
+                    Candidate Homepage — 3-Step Application Process
+                  </h3>
+                  <p className="mt-0.5 text-[11.5px] text-muted">
+                    Explain the application and review workflow to candidates.
+                  </p>
+                </div>
+
+                <div className="space-y-4 rounded-md border border-line/60 bg-surface/30 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                    Step 1
+                  </p>
+                  <div>
+                    <label htmlFor="process_step1_title" className="label">
+                      Step 1 Title
+                    </label>
+                    <input
+                      id="process_step1_title"
+                      name="process_step1_title"
+                      defaultValue={settings.process_step1_title || "Find Your Position"}
+                      className="input"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="process_step1_desc" className="label">
+                      Step 1 Description
+                    </label>
+                    <textarea
+                      id="process_step1_desc"
+                      name="process_step1_desc"
+                      defaultValue={
+                        settings.process_step1_desc ||
+                        "Explore roles across foundry, machining, quality, and administrative teams."
+                      }
+                      rows={2}
+                      className="textarea"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4 rounded-md border border-line/60 bg-surface/30 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                    Step 2
+                  </p>
+                  <div>
+                    <label htmlFor="process_step2_title" className="label">
+                      Step 2 Title
+                    </label>
+                    <input
+                      id="process_step2_title"
+                      name="process_step2_title"
+                      defaultValue={settings.process_step2_title || "Quick Online Application"}
+                      className="input"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="process_step2_desc" className="label">
+                      Step 2 Description
+                    </label>
+                    <textarea
+                      id="process_step2_desc"
+                      name="process_step2_desc"
+                      defaultValue={
+                        settings.process_step2_desc ||
+                        "Complete the short form on any phone or desktop and attach your CV."
+                      }
+                      rows={2}
+                      className="textarea"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4 rounded-md border border-line/60 bg-surface/30 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                    Step 3
+                  </p>
+                  <div>
+                    <label htmlFor="process_step3_title" className="label">
+                      Step 3 Title
+                    </label>
+                    <input
+                      id="process_step3_title"
+                      name="process_step3_title"
+                      defaultValue={settings.process_step3_title || "Direct Review by HR"}
+                      className="input"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="process_step3_desc" className="label">
+                      Step 3 Description
+                    </label>
+                    <textarea
+                      id="process_step3_desc"
+                      name="process_step3_desc"
+                      defaultValue={
+                        settings.process_step3_desc ||
+                        "Every submission goes straight to the Malati Group recruitment desk for interview scheduling."
+                      }
+                      rows={2}
+                      className="textarea"
+                    />
+                  </div>
+                </div>
+
+                <div className="border-t border-line pt-5">
+                  <h3 className="text-[14px] font-semibold text-ink">
+                    Candidate Homepage — Contact Strip Banner
+                  </h3>
+                  <p className="mt-0.5 text-[11.5px] text-muted">
+                    Customise the inquiry message shown at the bottom of the home page.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="contact_banner_title" className="label">
+                      Banner Heading
+                    </label>
+                    <input
+                      id="contact_banner_title"
+                      name="contact_banner_title"
+                      defaultValue={settings.contact_banner_title || "Questions about applying?"}
+                      className="input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact_banner_desc" className="label">
+                      Banner Subtitle
+                    </label>
+                    <input
+                      id="contact_banner_desc"
+                      name="contact_banner_desc"
+                      defaultValue={
+                        settings.contact_banner_desc ||
+                        "Contact our recruitment and HR team directly during working hours."
+                      }
+                      className="input"
+                    />
+                  </div>
                 </div>
               </div>
             </ActionForm>

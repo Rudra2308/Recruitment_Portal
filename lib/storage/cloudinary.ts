@@ -48,6 +48,8 @@ export async function uploadToCloudinary(
   // The original filename (e.g. Rahul_Patil.pdf) is preserved in Google Sheets
   // and attached to download headers.
   const uniqueId = `${randomUUID().slice(0, 12)}-${filename}.dat`;
+  const skew = Number(process.env.CLOCK_SKEW_SECONDS || "0") || 0;
+  const timestamp = Math.floor(Date.now() / 1000) + skew;
 
   return new Promise<CloudinaryUploadResult>((resolve, reject) => {
     const uploadStream = cld.uploader.upload_stream(
@@ -55,6 +57,7 @@ export async function uploadToCloudinary(
         folder: "recruitment-cvs",
         resource_type: "raw",
         public_id: uniqueId,
+        timestamp,
       },
       (error: unknown, result?: UploadApiResponse) => {
         if (error || !result) {

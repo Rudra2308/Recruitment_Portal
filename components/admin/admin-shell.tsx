@@ -7,6 +7,7 @@ import {
   Building2,
   ClipboardList,
   ExternalLink,
+  FolderDown,
   LayoutDashboard,
   ListFilter,
   LogOut,
@@ -61,6 +62,7 @@ const GROUPS: NavGroup[] = [
   {
     label: "Tools",
     items: [
+      { href: "/admin/tools/bulk-download", label: "Bulk Download", icon: FolderDown },
       { href: "/admin/tools/qr", label: "QR Codes", icon: QrCode },
       { href: "/admin/tools/audit", label: "Audit Log", icon: ScrollText },
     ],

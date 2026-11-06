@@ -81,11 +81,11 @@ export default async function HomePage() {
               </span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5 text-[#1a7f4b]" />
-                No Account Required
+                {settings.hero_tag1 || "No Account Required"}
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-muted" />
-                Apply in 2 Minutes
+                {settings.hero_tag2 || "Apply in 2 Minutes"}
               </span>
             </div>
           </div>
@@ -96,10 +96,11 @@ export default async function HomePage() {
       <section id="positions" className="container-page py-10 md:py-14">
         <div className="mb-6">
           <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-ink md:text-[28px]">
-            Open Positions
+            {settings.positions_heading || "Open Positions"}
           </h2>
           <p className="mt-1 text-[13px] text-muted">
-            Select a role to view detailed responsibilities and submit your application.
+            {settings.positions_subheading ||
+              "Select a role to view detailed responsibilities and submit your application."}
           </p>
         </div>
 
@@ -111,16 +112,18 @@ export default async function HomePage() {
         <div className="container-page py-12 md:py-16">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-8">
             <div>
-              <p className="eyebrow text-muted">Explore Functions</p>
+              <p className="eyebrow text-muted">
+                {settings.departments_eyebrow || "Explore Functions"}
+              </p>
               <h2 className="mt-1 text-[22px] font-semibold tracking-[-0.02em] text-ink md:text-[26px]">
-                Hiring Departments
+                {settings.departments_heading || "Hiring Departments"}
               </h2>
             </div>
             <Link
               href="/departments"
               className="text-[13px] font-medium text-brand hover:underline inline-flex items-center gap-1"
             >
-              View all departments <ArrowRight className="h-3.5 w-3.5" />
+              {settings.departments_link_text || "View all departments"} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
@@ -146,9 +149,12 @@ export default async function HomePage() {
                 1
               </span>
               <div>
-                <h3 className="text-[14px] font-semibold text-ink">Find Your Position</h3>
+                <h3 className="text-[14px] font-semibold text-ink">
+                  {settings.process_step1_title || "Find Your Position"}
+                </h3>
                 <p className="mt-1 text-[12px] leading-5 text-muted">
-                  Explore roles across foundry, machining, quality, and administrative teams.
+                  {settings.process_step1_desc ||
+                    "Explore roles across foundry, machining, quality, and administrative teams."}
                 </p>
               </div>
             </div>
@@ -158,9 +164,12 @@ export default async function HomePage() {
                 2
               </span>
               <div>
-                <h3 className="text-[14px] font-semibold text-ink">Quick Online Application</h3>
+                <h3 className="text-[14px] font-semibold text-ink">
+                  {settings.process_step2_title || "Quick Online Application"}
+                </h3>
                 <p className="mt-1 text-[12px] leading-5 text-muted">
-                  Complete the short form on any phone or desktop. Attach your CV or apply without one.
+                  {settings.process_step2_desc ||
+                    "Complete the short form on any phone or desktop and attach your CV."}
                 </p>
               </div>
             </div>
@@ -170,9 +179,12 @@ export default async function HomePage() {
                 3
               </span>
               <div>
-                <h3 className="text-[14px] font-semibold text-ink">Direct Review by HR</h3>
+                <h3 className="text-[14px] font-semibold text-ink">
+                  {settings.process_step3_title || "Direct Review by HR"}
+                </h3>
                 <p className="mt-1 text-[12px] leading-5 text-muted">
-                  Every submission goes straight to the Malati Group recruitment desk for interview scheduling.
+                  {settings.process_step3_desc ||
+                    "Every submission goes straight to the Malati Group recruitment desk for interview scheduling."}
                 </p>
               </div>
             </div>
@@ -184,8 +196,13 @@ export default async function HomePage() {
       <section className="border-t border-line bg-surface">
         <div className="container-page flex flex-col gap-4 py-8 sm:flex-row sm:items-center sm:justify-between text-[13px]">
           <div>
-            <p className="font-semibold text-ink">Questions about applying?</p>
-            <p className="text-muted">Contact our recruitment and HR team directly during working hours.</p>
+            <p className="font-semibold text-ink">
+              {settings.contact_banner_title || "Questions about applying?"}
+            </p>
+            <p className="text-muted">
+              {settings.contact_banner_desc ||
+                "Contact our recruitment and HR team directly during working hours."}
+            </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <a

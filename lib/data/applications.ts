@@ -48,8 +48,15 @@ function parseApplication(row: Row): Application {
     email: row.email ?? "",
     phone: row.phone ?? "",
     location: row.location ?? "",
+    experience_type: row.experience_type ?? "",
+    experience_years: row.experience_years ?? "",
     experience: row.experience ?? "",
     qualification: row.qualification ?? "",
+    current_employer: row.current_employer ?? "",
+    current_ctc: row.current_ctc ?? "",
+    current_gross: row.current_gross ?? "",
+    expected_gross: row.expected_gross ?? "",
+    notice_period: row.notice_period ?? "",
     additional_info: row.additional_info ?? "",
   };
   const payloadRaw = safeJsonParse<ApplicationPayload>(row.payload, corePayload);
@@ -70,8 +77,29 @@ function parseApplication(row: Row): Application {
     email: (row.email ?? "").trim(),
     phone: (row.phone ?? "").trim(),
     location: (row.location ?? "").trim(),
+    experience_type:
+      (row.experience_type ?? "").trim() ||
+      (typeof payload.experience_type === "string" ? payload.experience_type : ""),
+    experience_years:
+      (row.experience_years ?? "").trim() ||
+      (typeof payload.experience_years === "string" ? payload.experience_years : ""),
     experience: (row.experience ?? "").trim(),
     qualification: (row.qualification ?? "").trim(),
+    current_employer:
+      (row.current_employer ?? "").trim() ||
+      (typeof payload.current_employer === "string" ? payload.current_employer : ""),
+    current_ctc:
+      (row.current_ctc ?? "").trim() ||
+      (typeof payload.current_ctc === "string" ? payload.current_ctc : ""),
+    current_gross:
+      (row.current_gross ?? "").trim() ||
+      (typeof payload.current_gross === "string" ? payload.current_gross : ""),
+    expected_gross:
+      (row.expected_gross ?? "").trim() ||
+      (typeof payload.expected_gross === "string" ? payload.expected_gross : ""),
+    notice_period:
+      (row.notice_period ?? "").trim() ||
+      (typeof payload.notice_period === "string" ? payload.notice_period : ""),
     additional_info: (row.additional_info ?? "").trim(),
     cv_file_id: (row.cv_file_id ?? "").trim(),
     cv_filename: (row.cv_filename ?? "").trim(),
@@ -98,8 +126,15 @@ export interface CreateApplicationInput {
   email: string;
   phone: string;
   location: string;
+  experience_type?: string;
+  experience_years?: string;
   experience: string;
   qualification: string;
+  current_employer?: string;
+  current_ctc?: string;
+  current_gross?: string;
+  expected_gross?: string;
+  notice_period?: string;
   additional_info: string;
   cv_file_id: string;
   cv_filename: string;
@@ -122,8 +157,15 @@ export async function createApplication(
     email: input.email,
     phone: input.phone,
     location: input.location,
+    experience_type: input.experience_type || "",
+    experience_years: input.experience_years || "",
     experience: input.experience,
     qualification: input.qualification,
+    current_employer: input.current_employer || "",
+    current_ctc: input.current_ctc || "",
+    current_gross: input.current_gross || "",
+    expected_gross: input.expected_gross || "",
+    notice_period: input.notice_period || "",
     additional_info: input.additional_info,
     cv_file_id: input.cv_file_id,
     cv_filename: input.cv_filename,
@@ -136,7 +178,7 @@ export async function createApplication(
     ],
   };
 
-  const sheet: SheetName = input.cv_file_id ? "WITH_CV" : "WITHOUT_CV";
+  const sheet: SheetName = "WITH_CV";
   const row: Record<string, unknown> = {
     ...application,
     payload: JSON.stringify(application.payload),
@@ -289,6 +331,31 @@ export async function listApplications(
     pages,
     pageSize,
   };
+}
+
+export async function getAllApplicationsWithJob(): Promise<ApplicationWithJob[]> {
+  const [applications, positions] = await Promise.all([
+    readApplications(),
+    getAllPositions(),
+  ]);
+  const positionsById = new Map(positions.map((position) => [position.id, position]));
+
+  const rows: ApplicationWithJob[] = applications.map((application) => {
+    const position = positionsById.get(application.position_id);
+    return {
+      ...application,
+      position_title: position?.title ?? "Removed position",
+      position_department: position?.department ?? "—",
+    };
+  });
+
+  rows.sort(
+    (a, b) =>
+      Date.parse(b.created_at || "1970-01-01") -
+      Date.parse(a.created_at || "1970-01-01"),
+  );
+
+  return rows;
 }
 
 export interface ApplicationStats {

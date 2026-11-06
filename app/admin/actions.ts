@@ -738,6 +738,31 @@ export async function saveSettingsAction(
       hero_heading: text(formData, "hero_heading"),
       hero_subheading: text(formData, "hero_subheading"),
       hero_support: text(formData, "hero_support"),
+      hero_tag1: text(formData, "hero_tag1") || "No Account Required",
+      hero_tag2: text(formData, "hero_tag2") || "Apply in 2 Minutes",
+      positions_heading: text(formData, "positions_heading") || "Open Positions",
+      positions_subheading:
+        text(formData, "positions_subheading") ||
+        "Select a role to view detailed responsibilities and submit your application.",
+      departments_eyebrow: text(formData, "departments_eyebrow") || "Explore Functions",
+      departments_heading: text(formData, "departments_heading") || "Hiring Departments",
+      departments_link_text: text(formData, "departments_link_text") || "View all departments",
+      process_step1_title: text(formData, "process_step1_title") || "Find Your Position",
+      process_step1_desc:
+        text(formData, "process_step1_desc") ||
+        "Explore roles across foundry, machining, quality, and administrative teams.",
+      process_step2_title: text(formData, "process_step2_title") || "Quick Online Application",
+      process_step2_desc:
+        text(formData, "process_step2_desc") ||
+        "Complete the short form on any phone or desktop and attach your CV.",
+      process_step3_title: text(formData, "process_step3_title") || "Direct Review by HR",
+      process_step3_desc:
+        text(formData, "process_step3_desc") ||
+        "Every submission goes straight to the Malati Group recruitment desk for interview scheduling.",
+      contact_banner_title: text(formData, "contact_banner_title") || "Questions about applying?",
+      contact_banner_desc:
+        text(formData, "contact_banner_desc") ||
+        "Contact our recruitment and HR team directly during working hours.",
     };
 
     if (!patch.company_name) return { ok: false, error: "Company name is required." };

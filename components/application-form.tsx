@@ -58,7 +58,7 @@ function validateField(
 ): string | null {
   if (field.type === "file") {
     if (!file) {
-      return field.required ? "Upload your resume to continue." : null;
+      return "Upload your resume / CV to continue.";
     }
     const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
     if (![".pdf", ".doc", ".docx"].includes(extension)) {
@@ -174,8 +174,44 @@ export function ApplicationForm({
     }
   }, [stepIndex]);
 
+  const EXPERIENCED_ONLY_KEYS = [
+    "experience_years",
+    "current_employer",
+    "current_ctc",
+    "current_gross",
+    "expected_gross",
+    "notice_period",
+  ];
+
+  function isFieldVisible(field: ResolvedField): boolean {
+    if (EXPERIENCED_ONLY_KEYS.includes(field.key)) {
+      return values.experience_type === "experienced";
+    }
+    return true;
+  }
+
   function setValue(field: ResolvedField, value: FormValue) {
-    setValues((previous) => ({ ...previous, [field.key]: value }));
+    setValues((previous) => {
+      const next = { ...previous, [field.key]: value };
+      if (field.key === "experience_type") {
+        if (value === "fresher") {
+          next.experience_years = "";
+          next.current_employer = "N/A - Fresher";
+          next.current_ctc = "N/A";
+          next.current_gross = "N/A";
+          next.expected_gross = "N/A";
+          next.notice_period = "Immediate";
+        } else if (value === "experienced") {
+          if (next.current_employer === "N/A - Fresher") next.current_employer = "";
+          if (next.current_ctc === "N/A") next.current_ctc = "";
+          if (next.current_gross === "N/A") next.current_gross = "";
+          if (next.expected_gross === "N/A") next.expected_gross = "";
+          if (next.notice_period === "Immediate") next.notice_period = "";
+        }
+      }
+      return next;
+    });
+
     setErrors((previous) => {
       if (!previous[field.key]) return previous;
       const next = { ...previous };
@@ -187,6 +223,7 @@ export function ApplicationForm({
   function validateFields(target: ResolvedField[]): FormErrors {
     const next: FormErrors = {};
     for (const field of target) {
+      if (!isFieldVisible(field)) continue;
       const message = validateField(field, values[field.key], file, maxBytes);
       if (message) next[field.key] = message;
     }
@@ -229,9 +266,13 @@ export function ApplicationForm({
     const allErrors: FormErrors = {};
     for (const step of steps) {
       for (const field of step.fields) {
+        if (!isFieldVisible(field)) continue;
         const message = validateField(field, values[field.key], file, maxBytes);
         if (message) allErrors[field.key] = message;
       }
+    }
+    if (!file) {
+      allErrors.cv = "Upload your resume / CV to continue.";
     }
 
     if (Object.keys(allErrors).length) {
@@ -307,6 +348,8 @@ export function ApplicationForm({
   }
 
   function renderField(field: ResolvedField) {
+    if (!isFieldVisible(field)) return null;
+
     const error = errors[field.key];
     const describedBy = [
       field.description ? `hint-${field.key}` : null,
@@ -618,17 +661,21 @@ export function ApplicationForm({
                         </button>
                       </div>
                       <dl className="mt-3 divide-y divide-line">
-                        {step.fields.map((field) => (
-                          <div
-                            key={field.key}
-                            className="grid gap-1 py-2.5 sm:grid-cols-[180px_1fr] sm:gap-4"
-                          >
-                            <dt className="text-[12px] text-muted">{field.label}</dt>
-                            <dd className="break-words text-[13px] text-ink">
-                              {fieldValueLabel(field, values[field.key])}
-                            </dd>
-                          </div>
-                        ))}
+                        {step.fields
+                          .filter((field) => isFieldVisible(field))
+                          .map((field) => (
+                            <div
+                              key={field.key}
+                              className="grid gap-1 py-2.5 sm:grid-cols-[180px_1fr] sm:gap-4"
+                            >
+                              <dt className="text-[12px] text-muted">{field.label}</dt>
+                              <dd className="break-words text-[13px] text-ink">
+                                {field.type === "file" && file
+                                  ? file.name
+                                  : fieldValueLabel(field, values[field.key])}
+                              </dd>
+                            </div>
+                          ))}
                       </dl>
                     </div>
                   ))}

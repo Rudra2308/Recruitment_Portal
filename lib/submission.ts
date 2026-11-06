@@ -28,9 +28,22 @@ function stringValue(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function findMatchingOption(field: ResolvedField, value: string) {
+  if (!value) return null;
+  const valLower = value.toLowerCase().trim();
+  return (
+    field.options.find(
+      (opt) =>
+        opt.value === value ||
+        opt.value.toLowerCase() === valLower ||
+        opt.label.toLowerCase() === valLower,
+    ) ?? null
+  );
+}
+
 function optionsError(field: ResolvedField, value: string): string | null {
   if (!value) return null;
-  if (!field.options.some((option) => option.value === value)) {
+  if (!findMatchingOption(field, value)) {
     return "Choose a valid option.";
   }
   return null;
@@ -115,11 +128,13 @@ function validateField(
     }
   }
   if (field.type === "select" || field.type === "radio") {
-    const message = optionsError(field, value);
-    if (message) {
-      errors[field.key] = message;
+    const match = findMatchingOption(field, value);
+    if (!match) {
+      errors[field.key] = "Choose a valid option.";
       return;
     }
+    values[field.key] = match.label;
+    return;
   }
 
   values[field.key] = value;
@@ -209,11 +224,58 @@ export async function submitApplication(
     validateField(field, formData, values, errors, fileState);
   }
 
-  if (fileState.file) {
+  // Handle conditional logic for Fresher vs Experienced
+  const expType = coreString(values, "experience_type").toLowerCase();
+  const cvField = fields.find((field) => field.type === "file");
+
+  if (expType === "fresher") {
+    // Freshers do not need compensation or prior employer fields
+    delete errors.current_employer;
+    delete errors.experience_years;
+    delete errors.current_ctc;
+    delete errors.current_gross;
+    delete errors.expected_gross;
+    delete errors.notice_period;
+
+    values.current_employer = "N/A - Fresher";
+    values.experience_years = "0";
+    values.current_ctc = "N/A";
+    values.current_gross = "N/A";
+    values.expected_gross = coreString(values, "expected_gross") || "N/A";
+    values.notice_period = "Immediate";
+    values.experience = "Fresher (0 yrs)";
+  } else if (expType === "experienced") {
+    // Experienced candidates must provide their previous employment details
+    if (!coreString(values, "current_employer")) {
+      errors.current_employer = "Enter your current or last employer.";
+    }
+    if (!coreString(values, "experience_years")) {
+      errors.experience_years = "Enter your total years of experience.";
+    }
+    if (!coreString(values, "current_ctc")) {
+      errors.current_ctc = "Enter your current CTC.";
+    }
+    if (!coreString(values, "current_gross")) {
+      errors.current_gross = "Enter your current gross salary.";
+    }
+    if (!coreString(values, "expected_gross")) {
+      errors.expected_gross = "Enter your expected gross salary.";
+    }
+    if (!coreString(values, "notice_period")) {
+      errors.notice_period = "Select your notice period.";
+    }
+    values.experience = `${coreString(values, "experience_years")} (${coreString(values, "current_employer")})`;
+  } else if (!errors.experience_type) {
+    errors.experience_type = "Please select whether you are a Fresher or Experienced.";
+  }
+
+  // CV is strictly required for all applicants
+  if (!fileState.file || fileState.file.size === 0) {
+    errors[cvField?.key ?? "cv"] = "Upload your resume / CV to continue.";
+  } else {
     const validation = await validateCvFile(fileState.file);
     if (!validation.ok) {
-      const cvField = fields.find((field) => field.type === "file");
-      if (cvField) errors[cvField.key] = validation.error ?? "Invalid file.";
+      errors[cvField?.key ?? "cv"] = validation.error ?? "Invalid file.";
     }
   }
 
@@ -231,18 +293,16 @@ export async function submitApplication(
     statuses[0]?.name ??
     "NEW";
 
-  let uploaded: { fileId: string; filename: string } | null = null;
-  if (fileState.file) {
-    try {
-      uploaded = await uploadCv(fileState.file);
-    } catch (error) {
-      console.error("CV upload failed", error);
-      return {
-        ok: false,
-        error:
-          "Your CV could not be uploaded right now. Please try again in a moment.",
-      };
-    }
+  let uploaded: { fileId: string; filename: string };
+  try {
+    uploaded = await uploadCv(fileState.file!);
+  } catch (error) {
+    console.error("CV upload failed", error);
+    return {
+      ok: false,
+      error:
+        "Your CV could not be uploaded right now. Please try again in a moment.",
+    };
   }
 
   try {
@@ -252,11 +312,18 @@ export async function submitApplication(
       email: coreString(values, "email"),
       phone: coreString(values, "phone"),
       location: coreString(values, "location"),
-      experience: coreString(values, "experience"),
+      experience_type: expType === "fresher" ? "Fresher" : "Experienced",
+      experience_years: coreString(values, "experience_years"),
+      experience: coreString(values, "experience") || "Fresher",
       qualification: coreString(values, "qualification"),
+      current_employer: coreString(values, "current_employer"),
+      current_ctc: coreString(values, "current_ctc"),
+      current_gross: coreString(values, "current_gross"),
+      expected_gross: coreString(values, "expected_gross"),
+      notice_period: coreString(values, "notice_period"),
       additional_info: coreString(values, "additional_info"),
-      cv_file_id: uploaded?.fileId ?? "",
-      cv_filename: uploaded?.filename ?? "",
+      cv_file_id: uploaded.fileId,
+      cv_filename: uploaded.filename,
       status: initialStatus,
       payload: values,
       form_snapshot: buildSnapshot(position, fields),

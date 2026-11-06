@@ -13,9 +13,21 @@ const MIME_BY_EXTENSION: Record<string, string> = {
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 
-function safeDownloadName(value: string): string {
-  const name = (value || "cv").replace(/[^\w.\-() ]+/g, "_").slice(0, 120);
-  return name || "cv";
+function safeDownloadName(
+  candidateName: string,
+  applicationId: string,
+  originalFilename: string,
+): string {
+  const cleanName = (candidateName || "Candidate")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "_");
+  const cleanAppId = (applicationId || "Application").replace(/[^\w-]/g, "");
+  const ext =
+    originalFilename && originalFilename.includes(".")
+      ? originalFilename.slice(originalFilename.lastIndexOf(".")).toLowerCase()
+      : ".pdf";
+  return `${cleanName}_${cleanAppId}${ext}`;
 }
 
 export async function GET(
@@ -48,7 +60,11 @@ export async function GET(
     return jsonError(message, 500);
   }
 
-  const filename = safeDownloadName(application.cv_filename);
+  const filename = safeDownloadName(
+    application.candidate_name,
+    application.application_id,
+    application.cv_filename,
+  );
   const extension = filename.slice(filename.lastIndexOf(".")).toLowerCase();
   const contentType = MIME_BY_EXTENSION[extension] ?? "application/octet-stream";
 

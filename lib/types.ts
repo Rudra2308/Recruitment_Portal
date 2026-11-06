@@ -131,8 +131,15 @@ export interface Application {
   email: string;
   phone: string;
   location: string;
+  experience_type?: string;
+  experience_years?: string;
   experience: string;
   qualification: string;
+  current_employer?: string;
+  current_ctc?: string;
+  current_gross?: string;
+  expected_gross?: string;
+  notice_period?: string;
   additional_info: string;
   cv_file_id: string;
   cv_filename: string;
@@ -161,7 +168,22 @@ export interface Settings {
   hero_heading: string;
   hero_subheading: string;
   hero_support: string;
-  [key: string]: string;
+  hero_tag1?: string;
+  hero_tag2?: string;
+  positions_heading?: string;
+  positions_subheading?: string;
+  departments_eyebrow?: string;
+  departments_heading?: string;
+  departments_link_text?: string;
+  process_step1_title?: string;
+  process_step1_desc?: string;
+  process_step2_title?: string;
+  process_step2_desc?: string;
+  process_step3_title?: string;
+  process_step3_desc?: string;
+  contact_banner_title?: string;
+  contact_banner_desc?: string;
+  [key: string]: string | undefined;
 }
 
 export interface ResolvedField extends FormField {

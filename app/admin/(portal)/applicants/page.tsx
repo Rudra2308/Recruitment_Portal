@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, FileText, Search } from "lucide-react";
+import { ExternalLink, FileText, FolderDown, Search } from "lucide-react";
 
 import { ApplicantStatusPill } from "@/components/admin/status-pill";
 import {
@@ -44,6 +44,15 @@ export default async function AdminApplicantsPage({
         eyebrow="Recruitment"
         title="Applicants"
         description="Every application received through the portal. Search, filter and move candidates through the pipeline."
+        actions={
+          <Link
+            href="/admin/tools/bulk-download"
+            className="btn btn-primary btn-sm flex items-center gap-1.5"
+          >
+            <FolderDown className="h-3.5 w-3.5" />
+            Bulk Download CVs & Sheet
+          </Link>
+        }
       />
 
       <form

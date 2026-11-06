@@ -520,11 +520,11 @@ const FORM_FIELDS: Array<Omit<FormField, "created_at" | "updated_at">> = [
     section: "Personal",
   },
   {
-    id: "field-experience",
-    key: "experience",
+    id: "field-experience-type",
+    key: "experience_type",
     label: "Total experience",
-    description: "For example: 6 years in foundry quality.",
-    type: "text",
+    description: "Select whether you are a Fresher or Experienced professional.",
+    type: "select",
     required: true,
     visible: true,
     system_field: true,
@@ -536,7 +536,7 @@ const FORM_FIELDS: Array<Omit<FormField, "created_at" | "updated_at">> = [
     id: "field-qualification",
     key: "qualification",
     label: "Highest qualification",
-    description: "Degree, diploma or certification.",
+    description: "Degree, diploma or certification (e.g. B.E. Mechanical, Diploma).",
     type: "text",
     required: true,
     visible: true,
@@ -546,15 +546,67 @@ const FORM_FIELDS: Array<Omit<FormField, "created_at" | "updated_at">> = [
     section: "Professional",
   },
   {
+    id: "field-experience-years",
+    key: "experience_years",
+    label: "Total years of experience",
+    description: "Relevant industry experience (e.g. 3.5 years).",
+    type: "text",
+    required: true,
+    visible: true,
+    system_field: true,
+    display_order: 70,
+    active: true,
+    section: "Professional",
+  },
+  {
     id: "field-current-employer",
     key: "current_employer",
-    label: "Current employer",
-    description: "Optional. Your present or most recent organisation.",
+    label: "Current organisation",
+    description: "Your present or most recent organisation / company.",
     type: "text",
-    required: false,
+    required: true,
     visible: true,
-    system_field: false,
-    display_order: 70,
+    system_field: true,
+    display_order: 80,
+    active: true,
+    section: "Professional",
+  },
+  {
+    id: "field-current-ctc",
+    key: "current_ctc",
+    label: "Current salary (CTC drawn)",
+    description: "Annual CTC (e.g. ₹ 4.5 LPA).",
+    type: "text",
+    required: true,
+    visible: true,
+    system_field: true,
+    display_order: 90,
+    active: true,
+    section: "Professional",
+  },
+  {
+    id: "field-current-gross",
+    key: "current_gross",
+    label: "Current gross salary drawn",
+    description: "Monthly gross salary (e.g. ₹ 32,000 / month).",
+    type: "text",
+    required: true,
+    visible: true,
+    system_field: true,
+    display_order: 100,
+    active: true,
+    section: "Professional",
+  },
+  {
+    id: "field-expected-gross",
+    key: "expected_gross",
+    label: "Expected gross salary",
+    description: "Monthly gross expectation (e.g. ₹ 40,000 / month).",
+    type: "text",
+    required: true,
+    visible: true,
+    system_field: true,
+    display_order: 110,
     active: true,
     section: "Professional",
   },
@@ -564,10 +616,10 @@ const FORM_FIELDS: Array<Omit<FormField, "created_at" | "updated_at">> = [
     label: "Notice period",
     description: "How soon you can join if selected.",
     type: "select",
-    required: false,
+    required: true,
     visible: true,
-    system_field: false,
-    display_order: 80,
+    system_field: true,
+    display_order: 120,
     active: true,
     section: "Professional",
   },
@@ -575,25 +627,25 @@ const FORM_FIELDS: Array<Omit<FormField, "created_at" | "updated_at">> = [
     id: "field-additional-info",
     key: "additional_info",
     label: "Additional information",
-    description: "Anything else we should know about your application.",
+    description: "Optional notes on skills, certifications or machinery handled.",
     type: "textarea",
     required: false,
     visible: true,
     system_field: true,
-    display_order: 90,
+    display_order: 130,
     active: true,
-    section: "Professional",
+    section: "Documents",
   },
   {
     id: "field-cv",
     key: "cv",
     label: "Resume / CV",
-    description: "PDF, DOC or DOCX. Maximum 4 MB.",
+    description: "PDF, DOC or DOCX up to 4 MB. Required for all applicants.",
     type: "file",
-    required: false,
+    required: true,
     visible: true,
     system_field: true,
-    display_order: 100,
+    display_order: 140,
     active: true,
     section: "Documents",
   },
@@ -608,15 +660,45 @@ export function buildSeedFormFields(now = new Date()): FormField[] {
 }
 
 export function buildSeedFormOptions(): FormOption[] {
-  const noticeOptions = ["Immediate", "15 days", "30 days", "60 days", "90 days"];
-  return noticeOptions.map((label, index) => ({
-    id: `option-notice-${index + 1}`,
-    field_id: "field-notice-period",
-    label,
-    value: label.toLowerCase().replace(/\s+/g, "-"),
-    display_order: (index + 1) * 10,
-    active: true,
-  }));
+  const expTypeOptions = [
+    { label: "Fresher", value: "fresher" },
+    { label: "Experienced", value: "experienced" },
+  ];
+
+  const noticeOptions = [
+    "Immediate",
+    "15 Days",
+    "30 Days",
+    "45 Days",
+    "60 Days",
+    "90 Days",
+  ];
+
+  const options: FormOption[] = [];
+
+  expTypeOptions.forEach((item, index) => {
+    options.push({
+      id: `option-exp-type-${index + 1}`,
+      field_id: "field-experience-type",
+      label: item.label,
+      value: item.value,
+      display_order: (index + 1) * 10,
+      active: true,
+    });
+  });
+
+  noticeOptions.forEach((label, index) => {
+    options.push({
+      id: `option-notice-${index + 1}`,
+      field_id: "field-notice-period",
+      label,
+      value: label.toLowerCase().replace(/\s+/g, "-"),
+      display_order: (index + 1) * 10,
+      active: true,
+    });
+  });
+
+  return options;
 }
 
 export function buildSeedStatuses(): ApplicationStatus[] {

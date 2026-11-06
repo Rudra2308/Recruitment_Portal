@@ -140,9 +140,17 @@ export function isUsingDevAdminCredentials(): boolean {
 }
 
 export function getBaseUrl(): string {
-  const configured = (process.env.NEXT_PUBLIC_BASE_URL ?? "").trim();
+  const configured = (
+    process.env.NEXT_PUBLIC_BASE_URL ??
+    process.env.BASE_URL ??
+    ""
+  ).trim();
   if (configured) return configured.replace(/\/+$/, "");
-  const vercel = (process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL ?? "").trim();
+  const vercel = (
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL ??
+    ""
+  ).trim();
   if (vercel) return `https://${vercel.replace(/^https?:\/\//, "").replace(/\/+$/, "")}`;
   return "http://localhost:3000";
 }

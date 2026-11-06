@@ -28,8 +28,12 @@ interface SessionClaims {
 const isLocalhost =
   !isProduction ||
   Boolean(
-    process.env.NEXT_PUBLIC_BASE_URL?.startsWith("http://localhost") ||
-      process.env.NEXT_PUBLIC_BASE_URL?.startsWith("http://127.0.0.1"),
+    (process.env.NEXT_PUBLIC_BASE_URL ?? process.env.BASE_URL ?? "").startsWith(
+      "http://localhost",
+    ) ||
+      (process.env.NEXT_PUBLIC_BASE_URL ?? process.env.BASE_URL ?? "").startsWith(
+        "http://127.0.0.1",
+      ),
   );
 
 export const sessionCookieOptions = {

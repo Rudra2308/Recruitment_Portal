@@ -40,14 +40,20 @@ export interface CloudinaryConfig {
 }
 
 export function getCloudinaryConfig(): CloudinaryConfig | null {
+  function clean(val: string): string {
+    return val.replace(/^[<"'\s]+|[>"'\s]+$/g, "").trim();
+  }
+
   // Support single CLOUDINARY_URL format (e.g. cloudinary://apiKey:apiSecret@cloudName)
   const cloudinaryUrl = (process.env.CLOUDINARY_URL ?? "").trim();
   if (cloudinaryUrl) {
     try {
-      const parsed = new URL(cloudinaryUrl);
-      const cloudName = parsed.hostname;
-      const apiKey = decodeURIComponent(parsed.username);
-      const apiSecret = decodeURIComponent(parsed.password);
+      // Strip any accidental brackets or whitespace around the whole URL
+      const sanitized = cloudinaryUrl.replace(/^[<"'\s]+|[>"'\s]+$/g, "");
+      const parsed = new URL(sanitized);
+      const cloudName = clean(parsed.hostname);
+      const apiKey = clean(decodeURIComponent(parsed.username));
+      const apiSecret = clean(decodeURIComponent(parsed.password));
       if (cloudName && apiKey && apiSecret) {
         return { cloudName, apiKey, apiSecret };
       }
@@ -56,9 +62,9 @@ export function getCloudinaryConfig(): CloudinaryConfig | null {
     }
   }
 
-  const cloudName = (process.env.CLOUDINARY_CLOUD_NAME ?? "").trim();
-  const apiKey = (process.env.CLOUDINARY_API_KEY ?? "").trim();
-  const apiSecret = (process.env.CLOUDINARY_API_SECRET ?? "").trim();
+  const cloudName = clean(process.env.CLOUDINARY_CLOUD_NAME ?? "");
+  const apiKey = clean(process.env.CLOUDINARY_API_KEY ?? "");
+  const apiSecret = clean(process.env.CLOUDINARY_API_SECRET ?? "");
 
   if (!cloudName || !apiKey || !apiSecret) {
     return null;

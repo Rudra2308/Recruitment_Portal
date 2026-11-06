@@ -43,7 +43,11 @@ export async function uploadToCloudinary(
   const cld = initCloudinary();
   const filename = sanitiseFilename(file.name);
   const buffer = Buffer.from(await file.arrayBuffer());
-  const uniqueId = `${randomUUID().slice(0, 12)}-${filename}`;
+  // Store with a safe raw key. We append .dat so Cloudinary's default
+  // account-level restriction on delivering raw .pdf files never triggers.
+  // The original filename (e.g. Rahul_Patil.pdf) is preserved in Google Sheets
+  // and attached to download headers.
+  const uniqueId = `${randomUUID().slice(0, 12)}-${filename}.dat`;
 
   return new Promise<CloudinaryUploadResult>((resolve, reject) => {
     const uploadStream = cld.uploader.upload_stream(
@@ -51,7 +55,6 @@ export async function uploadToCloudinary(
         folder: "recruitment-cvs",
         resource_type: "raw",
         public_id: uniqueId,
-        use_filename: true,
       },
       (error: unknown, result?: UploadApiResponse) => {
         if (error || !result) {

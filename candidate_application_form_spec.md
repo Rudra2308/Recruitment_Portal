@@ -34,6 +34,7 @@ All personal details are mandatory to ensure recruiters can contact the applican
 | **Full Name** | `candidate_name` | `text` | **Yes** | *"As it appears on your government ID or certificates."* | Min 2 chars, Max 120 chars, letters & spaces. |
 | **Email Address** | `email` | `email` | **Yes** | *"We will send your application receipt and updates here."* | Valid email pattern (`RFC 5322`). |
 | **Phone Number** | `phone` | `tel` | **Yes** | *"10-digit mobile number for WhatsApp & calls."* | Standard 10-digit Indian phone (or with country code). |
+| **Gender** | `gender` | `select` | **Yes** | *"Select your gender."* | Options: `Male`, `Female`, `Other` |
 | **Current Location** | `location` | `text` | **Yes** | *"City, State (e.g. Kolhapur, Maharashtra)."* | Min 2 chars, Max 100 chars. |
 
 ---
@@ -62,7 +63,7 @@ When `Fresher` is chosen, all past organizational and compensation history field
 | **No. of Years Experience**| `experience_years` | ❌ **Hidden** | No | — | Automatically set to `"0"` |
 | **Current Salary (CTC)** | `current_ctc` | ❌ **Hidden** | No | — | Automatically set to `"N/A"` |
 | **Current Gross Salary** | `current_gross` | ❌ **Hidden** | No | — | Automatically set to `"N/A"` |
-| **Expected Gross Salary** | `expected_gross` | **Optional** | No | Number / Text | Optional expectation in ₹ / month or LPA |
+| **Expected Gross Salary** | `expected_gross` | **Yes** | **Yes** | Text / Number | Expected monthly gross or annual compensation |
 | **Notice Period** | `notice_period` | ❌ **Hidden** | No | — | Automatically set to `"Immediate"` |
 
 ---

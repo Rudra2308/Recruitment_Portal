@@ -33,9 +33,11 @@ async function run() {
   fresherForm.set("candidate_name", "Aarav Sharma");
   fresherForm.set("email", "aarav.sharma.test@example.com");
   fresherForm.set("phone", "+91 98111 22334");
+  fresherForm.set("gender", "Male");
   fresherForm.set("location", "Pune, Maharashtra");
   fresherForm.set("experience_type", "Fresher");
   fresherForm.set("qualification", "B.Tech Mechanical Engineering");
+  fresherForm.set("expected_gross", "₹ 28,000 / month");
   fresherForm.set("additional_info", "Enthusiastic graduate ready for immediate start.");
   fresherForm.set("cv", new Blob([cvBuffer], { type: "application/pdf" }), "aarav_resume.pdf");
 
@@ -55,6 +57,7 @@ async function run() {
   expForm.set("candidate_name", "Pooja Kulkarni");
   expForm.set("email", "pooja.kulkarni.test@example.com");
   expForm.set("phone", "+91 98222 33445");
+  expForm.set("gender", "Female");
   expForm.set("location", "Kolhapur, Maharashtra");
   expForm.set("experience_type", "Experienced");
   expForm.set("experience_years", "4");
@@ -93,19 +96,23 @@ async function run() {
 
   console.log("   ✓ Fresher row fields:", {
     name: fresherRow.candidate_name,
+    gender: fresherRow.gender,
     type: fresherRow.experience_type,
     years: fresherRow.experience_years,
     qualification: fresherRow.qualification,
+    expected_gross: fresherRow.expected_gross,
     cv_filename: fresherRow.cv_filename,
     cv_file_id: fresherRow.cv_file_id,
   });
 
   console.log("   ✓ Experienced row fields:", {
     name: expRow.candidate_name,
+    gender: expRow.gender,
     type: expRow.experience_type,
     years: expRow.experience_years,
     employer: expRow.current_employer,
     current_ctc: expRow.current_ctc,
+    expected_gross: expRow.expected_gross,
     notice_period: expRow.notice_period,
     cv_filename: expRow.cv_filename,
     cv_file_id: expRow.cv_file_id,
@@ -141,7 +148,7 @@ async function run() {
   const csvFilename = `Applicants_Master_Export_${timestamp}.csv`;
   const csvHeaders = [
     "Application ID", "Candidate Name", "Position Title", "Department",
-    "Email", "Phone", "Current Location", "Experience Type",
+    "Email", "Phone", "Gender", "Current Location", "Experience Type",
     "Total Experience Years", "Highest Qualification", "Current Organisation",
     "Current Salary (CTC)", "Current Gross Salary", "Expected Gross Salary",
     "Notice Period", "Status", "Applied At", "CV Attached?", "CV Filename"
@@ -154,6 +161,7 @@ async function run() {
     `"${openJob.department}"`,
     `"${app.email}"`,
     `"${app.phone}"`,
+    `"${app.gender || ""}"`,
     `"${app.location}"`,
     `"${app.experience_type}"`,
     `"${app.experience_years}"`,

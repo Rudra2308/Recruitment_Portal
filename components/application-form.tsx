@@ -179,7 +179,6 @@ export function ApplicationForm({
     "current_employer",
     "current_ctc",
     "current_gross",
-    "expected_gross",
     "notice_period",
   ];
 
@@ -199,13 +198,11 @@ export function ApplicationForm({
           next.current_employer = "N/A - Fresher";
           next.current_ctc = "N/A";
           next.current_gross = "N/A";
-          next.expected_gross = "N/A";
           next.notice_period = "Immediate";
         } else if (value === "experienced") {
           if (next.current_employer === "N/A - Fresher") next.current_employer = "";
           if (next.current_ctc === "N/A") next.current_ctc = "";
           if (next.current_gross === "N/A") next.current_gross = "";
-          if (next.expected_gross === "N/A") next.expected_gross = "";
           if (next.notice_period === "Immediate") next.notice_period = "";
         }
       }

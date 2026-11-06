@@ -77,6 +77,7 @@ export function BulkDownloadManager({
           app.application_id,
           app.email,
           app.phone,
+          app.gender || "",
           app.location,
           app.position_title,
           app.position_department,
@@ -424,6 +425,7 @@ export function BulkDownloadManager({
                       </Link>
                       <p className="mt-0.5 text-[10.5px] text-muted">
                         {app.email} · {app.phone}
+                        {app.gender ? ` · ${app.gender}` : ""}
                       </p>
                       <p className="mt-0.5 font-mono text-[10px] text-muted">
                         {app.application_id}
@@ -448,7 +450,12 @@ export function BulkDownloadManager({
                     </td>
                     <td className="min-w-[150px] text-[11px]">
                       {expType === "Fresher" ? (
-                        <span className="text-muted">Fresher (N/A)</span>
+                        <>
+                          <span className="text-muted">Fresher</span>
+                          <p className="text-ink text-[10.5px]">
+                            Exp Gross: {app.expected_gross || "—"}
+                          </p>
+                        </>
                       ) : (
                         <>
                           <p className="text-ink">CTC: {app.current_ctc || "—"}</p>

@@ -47,6 +47,7 @@ function parseApplication(row: Row): Application {
     candidate_name: row.candidate_name ?? "",
     email: row.email ?? "",
     phone: row.phone ?? "",
+    gender: row.gender ?? "",
     location: row.location ?? "",
     experience_type: row.experience_type ?? "",
     experience_years: row.experience_years ?? "",
@@ -76,6 +77,9 @@ function parseApplication(row: Row): Application {
     candidate_name: (row.candidate_name ?? "").trim(),
     email: (row.email ?? "").trim(),
     phone: (row.phone ?? "").trim(),
+    gender:
+      (row.gender ?? "").trim() ||
+      (typeof payload.gender === "string" ? payload.gender : ""),
     location: (row.location ?? "").trim(),
     experience_type:
       (row.experience_type ?? "").trim() ||
@@ -125,6 +129,7 @@ export interface CreateApplicationInput {
   candidate_name: string;
   email: string;
   phone: string;
+  gender?: string;
   location: string;
   experience_type?: string;
   experience_years?: string;
@@ -156,6 +161,7 @@ export async function createApplication(
     candidate_name: input.candidate_name,
     email: input.email,
     phone: input.phone,
+    gender: input.gender || "",
     location: input.location,
     experience_type: input.experience_type || "",
     experience_years: input.experience_years || "",

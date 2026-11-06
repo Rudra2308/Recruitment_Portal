@@ -61,6 +61,7 @@ export const SHEET_HEADERS: Record<SheetName, string[]> = {
     "candidate_name",
     "email",
     "phone",
+    "gender",
     "location",
     "experience_type",
     "experience_years",

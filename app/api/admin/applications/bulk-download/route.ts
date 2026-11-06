@@ -54,6 +54,7 @@ function buildCsv(
     "Department",
     "Email",
     "Phone",
+    "Gender",
     "Current Location",
     "Experience Type",
     "Total Experience Years",
@@ -85,6 +86,7 @@ function buildCsv(
       escapeCsv(job?.department || "—"),
       escapeCsv(app.email),
       escapeCsv(app.phone),
+      escapeCsv(app.gender || "—"),
       escapeCsv(app.location),
       escapeCsv(expType),
       escapeCsv(app.experience_years || (expType === "Fresher" ? "0" : app.experience)),
@@ -147,6 +149,7 @@ export async function POST(request: Request) {
         candidate_name: row.candidate_name || "",
         email: row.email || "",
         phone: row.phone || "",
+        gender: row.gender || payload.gender || "",
         location: row.location || "",
         experience_type:
           row.experience_type || payload.experience_type || "",

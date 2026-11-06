@@ -130,6 +130,7 @@ export interface Application {
   candidate_name: string;
   email: string;
   phone: string;
+  gender?: string;
   location: string;
   experience_type?: string;
   experience_years?: string;

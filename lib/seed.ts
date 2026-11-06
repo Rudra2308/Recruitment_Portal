@@ -507,6 +507,19 @@ const FORM_FIELDS: Array<Omit<FormField, "created_at" | "updated_at">> = [
     section: "Personal",
   },
   {
+    id: "field-gender",
+    key: "gender",
+    label: "Gender",
+    description: "Select your gender.",
+    type: "select",
+    required: true,
+    visible: true,
+    system_field: true,
+    display_order: 35,
+    active: true,
+    section: "Personal",
+  },
+  {
     id: "field-location",
     key: "location",
     label: "Current location",
@@ -660,6 +673,12 @@ export function buildSeedFormFields(now = new Date()): FormField[] {
 }
 
 export function buildSeedFormOptions(): FormOption[] {
+  const genderOptions = [
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+    { label: "Other", value: "other" },
+  ];
+
   const expTypeOptions = [
     { label: "Fresher", value: "fresher" },
     { label: "Experienced", value: "experienced" },
@@ -675,6 +694,17 @@ export function buildSeedFormOptions(): FormOption[] {
   ];
 
   const options: FormOption[] = [];
+
+  genderOptions.forEach((item, index) => {
+    options.push({
+      id: `option-gender-${index + 1}`,
+      field_id: "field-gender",
+      label: item.label,
+      value: item.value,
+      display_order: (index + 1) * 10,
+      active: true,
+    });
+  });
 
   expTypeOptions.forEach((item, index) => {
     options.push({

@@ -229,19 +229,22 @@ export async function submitApplication(
   const cvField = fields.find((field) => field.type === "file");
 
   if (expType === "fresher") {
-    // Freshers do not need compensation or prior employer fields
+    // Freshers do not need prior employer or current drawn compensation
     delete errors.current_employer;
     delete errors.experience_years;
     delete errors.current_ctc;
     delete errors.current_gross;
-    delete errors.expected_gross;
     delete errors.notice_period;
+
+    if (!coreString(values, "expected_gross")) {
+      errors.expected_gross = "Enter your expected gross salary.";
+    }
 
     values.current_employer = "N/A - Fresher";
     values.experience_years = "0";
     values.current_ctc = "N/A";
     values.current_gross = "N/A";
-    values.expected_gross = coreString(values, "expected_gross") || "N/A";
+    values.expected_gross = coreString(values, "expected_gross");
     values.notice_period = "Immediate";
     values.experience = "Fresher (0 yrs)";
   } else if (expType === "experienced") {
@@ -311,6 +314,7 @@ export async function submitApplication(
       candidate_name: coreString(values, "candidate_name"),
       email: coreString(values, "email"),
       phone: coreString(values, "phone"),
+      gender: coreString(values, "gender"),
       location: coreString(values, "location"),
       experience_type: expType === "fresher" ? "Fresher" : "Experienced",
       experience_years: coreString(values, "experience_years"),

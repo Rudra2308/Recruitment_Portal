@@ -464,6 +464,14 @@ export function ApplicationForm({
                 <span className="mt-1 text-[11px] text-muted">
                   PDF, DOC or DOCX · up to {cvMaxMb} MB
                 </span>
+                <a
+                  href="/demo-cv.pdf"
+                  download="demo-cv.pdf"
+                  className="mt-2 text-[11px] text-brand underline underline-offset-2 hover:opacity-80"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Download sample demo CV (PDF)
+                </a>
                 <input
                   id={`field-${field.key}`}
                   name={field.key}

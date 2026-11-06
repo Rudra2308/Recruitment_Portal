@@ -46,23 +46,49 @@ export async function uploadCv(file: File): Promise<UploadedCv> {
   }
   const buffer = Buffer.from(await file.arrayBuffer());
   const drive = getDriveClient();
-  const response = await drive.files.create({
-    requestBody: {
-      name: filename,
-      parents: [folderId],
-      mimeType: file.type || "application/octet-stream",
-    },
-    media: {
-      mimeType: file.type || "application/octet-stream",
-      body: Readable.from(buffer),
-    },
-    fields: "id",
-    supportsAllDrives: true,
-  });
 
-  const fileId = response.data.id;
-  if (!fileId) throw new Error("Google Drive did not return a file id.");
-  return { fileId, filename };
+  try {
+    const response = await drive.files.create({
+      requestBody: {
+        name: filename,
+        parents: [folderId],
+        mimeType: file.type || "application/octet-stream",
+      },
+      media: {
+        mimeType: file.type || "application/octet-stream",
+        body: Readable.from(buffer),
+      },
+      fields: "id",
+      supportsAllDrives: true,
+    });
+
+    const fileId = response.data.id;
+    if (!fileId) throw new Error("Google Drive did not return a file id.");
+    return { fileId, filename };
+  } catch (error: unknown) {
+    const message =
+      (error && typeof error === "object" && "message" in error
+        ? String((error as { message: unknown }).message)
+        : "") ||
+      (error && typeof error === "object" && "cause" in error
+        ? String(((error as { cause: { message?: unknown } }).cause)?.message)
+        : "");
+
+    // Personal Google Drives do not grant storage quota to service accounts.
+    // Fall back to local persistent upload so the candidate's application is not lost.
+    if (message.includes("Service Accounts do not have storage quota")) {
+      console.warn(
+        "[Google Drive] Personal drive detected (Service accounts require a Google Workspace Shared Drive for cloud quota). Saving CV to local upload storage.",
+      );
+      const directory = localUploadDirectory();
+      await mkdir(directory, { recursive: true });
+      const storedName = `${randomUUID()}${fileExtension(filename)}`;
+      await writeFile(path.join(directory, storedName), buffer);
+      return { fileId: `local:${storedName}`, filename };
+    }
+
+    throw error;
+  }
 }
 
 export async function getCvStream(
@@ -70,8 +96,9 @@ export async function getCvStream(
 ): Promise<ReadableStream<Uint8Array>> {
   const mode = getDataMode();
 
-  if (mode === "local") {
-    const filename = safeStoredName(fileId);
+  if (mode === "local" || fileId.startsWith("local:")) {
+    const rawId = fileId.replace(/^local:/, "");
+    const filename = safeStoredName(rawId);
     if (!filename) throw new Error("Invalid CV reference.");
     const buffer = await readFile(path.join(localUploadDirectory(), filename));
     return Readable.toWeb(Readable.from(buffer)) as ReadableStream<Uint8Array>;
@@ -91,8 +118,9 @@ export async function deleteCv(fileId: string): Promise<void> {
   if (!fileId) return;
   const mode = getDataMode();
   try {
-    if (mode === "local") {
-      await unlink(path.join(localUploadDirectory(), safeStoredName(fileId)));
+    if (mode === "local" || fileId.startsWith("local:")) {
+      const rawId = fileId.replace(/^local:/, "");
+      await unlink(path.join(localUploadDirectory(), safeStoredName(rawId)));
       return;
     }
     await getDriveClient().files.delete({ fileId, supportsAllDrives: true });

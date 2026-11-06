@@ -33,6 +33,44 @@ export function getDriveFolderId(): string {
   return (process.env.GOOGLE_DRIVE_FOLDER_ID ?? "").trim();
 }
 
+export interface CloudinaryConfig {
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+}
+
+export function getCloudinaryConfig(): CloudinaryConfig | null {
+  // Support single CLOUDINARY_URL format (e.g. cloudinary://apiKey:apiSecret@cloudName)
+  const cloudinaryUrl = (process.env.CLOUDINARY_URL ?? "").trim();
+  if (cloudinaryUrl) {
+    try {
+      const parsed = new URL(cloudinaryUrl);
+      const cloudName = parsed.hostname;
+      const apiKey = decodeURIComponent(parsed.username);
+      const apiSecret = decodeURIComponent(parsed.password);
+      if (cloudName && apiKey && apiSecret) {
+        return { cloudName, apiKey, apiSecret };
+      }
+    } catch {
+      // fallback to individual vars
+    }
+  }
+
+  const cloudName = (process.env.CLOUDINARY_CLOUD_NAME ?? "").trim();
+  const apiKey = (process.env.CLOUDINARY_API_KEY ?? "").trim();
+  const apiSecret = (process.env.CLOUDINARY_API_SECRET ?? "").trim();
+
+  if (!cloudName || !apiKey || !apiSecret) {
+    return null;
+  }
+
+  return { cloudName, apiKey, apiSecret };
+}
+
+export function isCloudinaryConfigured(): boolean {
+  return getCloudinaryConfig() !== null;
+}
+
 export interface R2Config {
   accountId: string;
   accessKeyId: string;

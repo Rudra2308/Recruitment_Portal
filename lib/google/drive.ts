@@ -3,10 +3,20 @@ import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 
-import { getDataMode, getDriveFolderId, isR2Configured } from "@/lib/config";
+import {
+  getDataMode,
+  getDriveFolderId,
+  isCloudinaryConfigured,
+  isR2Configured,
+} from "@/lib/config";
 import { getLocalDataDir } from "@/lib/data/local-store";
 import { fileExtension, sanitiseFilename } from "@/lib/files";
 import { getDriveClient } from "@/lib/google/auth";
+import {
+  deleteFromCloudinary,
+  getCloudinaryStream,
+  uploadToCloudinary,
+} from "@/lib/storage/cloudinary";
 import { deleteFromR2, getR2Stream, uploadToR2 } from "@/lib/storage/r2";
 
 function localUploadDirectory(): string {
@@ -27,8 +37,12 @@ export interface UploadedCv {
  * with no public permission; local development files live under .data/uploads.
  */
 export async function uploadCv(file: File): Promise<UploadedCv> {
-  // If Cloudflare R2 is configured, it is the primary production storage.
-  // It completely eliminates personal Google Drive quota restrictions.
+  // Cloudinary: 25 GB free storage, zero credit card requirement.
+  if (isCloudinaryConfigured()) {
+    return uploadToCloudinary(file);
+  }
+
+  // Cloudflare R2: S3-compatible object storage.
   if (isR2Configured()) {
     return uploadToR2(file);
   }
@@ -149,6 +163,10 @@ export async function uploadCv(file: File): Promise<UploadedCv> {
 export async function getCvStream(
   fileId: string,
 ): Promise<ReadableStream<Uint8Array>> {
+  if (fileId.startsWith("cloudinary:")) {
+    return getCloudinaryStream(fileId);
+  }
+
   if (fileId.startsWith("r2:")) {
     return getR2Stream(fileId);
   }
@@ -175,6 +193,10 @@ export async function getCvStream(
 
 export async function deleteCv(fileId: string): Promise<void> {
   if (!fileId) return;
+  if (fileId.startsWith("cloudinary:")) {
+    await deleteFromCloudinary(fileId);
+    return;
+  }
   if (fileId.startsWith("r2:")) {
     await deleteFromR2(fileId);
     return;

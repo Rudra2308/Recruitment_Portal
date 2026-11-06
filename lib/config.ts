@@ -33,6 +33,32 @@ export function getDriveFolderId(): string {
   return (process.env.GOOGLE_DRIVE_FOLDER_ID ?? "").trim();
 }
 
+export interface R2Config {
+  accountId: string;
+  accessKeyId: string;
+  secretAccessKey: string;
+  bucketName: string;
+}
+
+export function getR2Config(): R2Config | null {
+  const accountId = (process.env.R2_ACCOUNT_ID ?? "").trim();
+  const accessKeyId = (process.env.R2_ACCESS_KEY_ID ?? "").trim();
+  const secretAccessKey = (process.env.R2_SECRET_ACCESS_KEY ?? "").trim();
+  const bucketName = (
+    process.env.R2_BUCKET_NAME ?? "malati-recruitment-cvs"
+  ).trim();
+
+  if (!accountId || !accessKeyId || !secretAccessKey || !bucketName) {
+    return null;
+  }
+
+  return { accountId, accessKeyId, secretAccessKey, bucketName };
+}
+
+export function isR2Configured(): boolean {
+  return getR2Config() !== null;
+}
+
 export interface ServiceAccountCredentials {
   client_email: string;
   private_key: string;

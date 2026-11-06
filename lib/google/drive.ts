@@ -3,10 +3,11 @@ import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 
-import { getDataMode, getDriveFolderId } from "@/lib/config";
+import { getDataMode, getDriveFolderId, isR2Configured } from "@/lib/config";
 import { getLocalDataDir } from "@/lib/data/local-store";
 import { fileExtension, sanitiseFilename } from "@/lib/files";
 import { getDriveClient } from "@/lib/google/auth";
+import { deleteFromR2, getR2Stream, uploadToR2 } from "@/lib/storage/r2";
 
 function localUploadDirectory(): string {
   return path.join(getLocalDataDir(), "uploads");
@@ -26,6 +27,12 @@ export interface UploadedCv {
  * with no public permission; local development files live under .data/uploads.
  */
 export async function uploadCv(file: File): Promise<UploadedCv> {
+  // If Cloudflare R2 is configured, it is the primary production storage.
+  // It completely eliminates personal Google Drive quota restrictions.
+  if (isR2Configured()) {
+    return uploadToR2(file);
+  }
+
   const filename = sanitiseFilename(file.name);
   const mode = getDataMode();
 
@@ -142,6 +149,10 @@ export async function uploadCv(file: File): Promise<UploadedCv> {
 export async function getCvStream(
   fileId: string,
 ): Promise<ReadableStream<Uint8Array>> {
+  if (fileId.startsWith("r2:")) {
+    return getR2Stream(fileId);
+  }
+
   const mode = getDataMode();
 
   if (mode === "local" || fileId.startsWith("local:")) {
@@ -164,6 +175,11 @@ export async function getCvStream(
 
 export async function deleteCv(fileId: string): Promise<void> {
   if (!fileId) return;
+  if (fileId.startsWith("r2:")) {
+    await deleteFromR2(fileId);
+    return;
+  }
+
   const mode = getDataMode();
   try {
     if (mode === "local" || fileId.startsWith("local:")) {

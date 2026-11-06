@@ -40,8 +40,12 @@ export async function GET(
   try {
     stream = await getCvStream(application.cv_file_id);
   } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "The CV could not be retrieved right now.";
     console.error("CV download failed", error);
-    return jsonError("The CV could not be retrieved right now.", 500);
+    return jsonError(message, 500);
   }
 
   const filename = safeDownloadName(application.cv_filename);

@@ -12,14 +12,17 @@ export function SiteFooter({ settings }: { settings: Settings }) {
       <div className="container-page py-14 md:py-16">
         <div className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Wordmark tone="light" />
-            <p className="mt-6 max-w-xs text-sm leading-6 text-white/55">
-              A single place to explore open roles across Malati Group and apply
-              online. No account needed.
+            <Wordmark tone="light" size="lg" />
+            <p className="mt-6 max-w-xs text-sm leading-6 text-white/60">
+              Industrial Precision × Modern Engineering. A single place to
+              explore open roles across Malati Group and apply online.
             </p>
-            <p className="mt-8 text-xs uppercase tracking-[0.16em] text-white/35">
-              Recruitment portal · {year}
-            </p>
+            <div className="mt-7 flex items-center gap-2.5">
+              <span className="h-1 w-6 rounded-full bg-brand" />
+              <p className="text-xs uppercase tracking-[0.16em] text-white/45">
+                Recruitment portal · {year}
+              </p>
+            </div>
           </div>
 
           <div className="md:col-span-3">

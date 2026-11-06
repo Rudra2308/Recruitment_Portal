@@ -422,8 +422,8 @@ export function ApplicationForm({
                 <label
                   key={option.id}
                   className={cn(
-                    "flex min-h-11 cursor-pointer items-center gap-3 border px-3.5 py-2.5 text-[13px] transition-colors",
-                    selected ? "border-ink bg-surface" : "border-line hover:border-ink/40",
+                    "flex min-h-11 cursor-pointer items-center gap-3 rounded-[6px] border px-3.5 py-2.5 text-[13px] transition-colors",
+                    selected ? "border-brand bg-brand-light/40 font-medium text-ink" : "border-line hover:border-ink/40",
                   )}
                 >
                   <input
@@ -583,7 +583,7 @@ export function ApplicationForm({
 
   return (
     <div id="application-form-start" className="scroll-mt-24">
-      <div className="border border-line bg-white">
+      <div className="overflow-hidden rounded-[10px] border border-line bg-white shadow-xs">
         <div className="border-b border-line px-5 py-5 md:px-7">
           <div className="flex items-center justify-between gap-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
@@ -698,7 +698,7 @@ export function ApplicationForm({
               type="button"
               onClick={goBack}
               disabled={stepIndex === 0 || submitting}
-              className="inline-flex min-h-11 items-center justify-center gap-2 border border-line px-4 text-[13px] font-medium transition-colors hover:border-ink disabled:pointer-events-none disabled:opacity-40"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[6px] border border-line px-4 text-[13px] font-medium transition-colors hover:border-ink disabled:pointer-events-none disabled:opacity-40"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -708,7 +708,7 @@ export function ApplicationForm({
               <button
                 type="submit"
                 disabled={submitting || preview}
-                className="inline-flex min-h-11 items-center justify-center gap-2 bg-brand px-6 text-[13px] font-medium text-white transition-colors hover:bg-brand-dark disabled:pointer-events-none disabled:opacity-50"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[6px] bg-brand px-6 text-[13px] font-medium text-white transition-colors hover:bg-brand-dark disabled:pointer-events-none disabled:opacity-50"
               >
                 {submitting ? (
                   <>
@@ -726,7 +726,7 @@ export function ApplicationForm({
               <button
                 type="button"
                 onClick={goNext}
-                className="inline-flex min-h-11 items-center justify-center gap-2 bg-ink px-6 text-[13px] font-medium text-white transition-colors hover:bg-black"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[6px] bg-ink px-6 text-[13px] font-medium text-white transition-colors hover:bg-black"
               >
                 Continue
                 <ArrowRight className="h-4 w-4" />

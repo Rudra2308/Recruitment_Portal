@@ -92,10 +92,7 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col">
       <div className="border-b border-line px-5 py-5">
-        <Wordmark />
-        <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-muted">
-          Recruitment Admin
-        </p>
+        <Wordmark subtitle="Recruitment Admin" />
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2.5 py-4">

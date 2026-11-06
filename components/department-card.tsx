@@ -15,10 +15,10 @@ export function DepartmentCard({
   return (
     <Link
       href={`/departments/${department.id}`}
-      className="group relative flex min-h-[214px] flex-col justify-between border border-line bg-white p-6 transition-colors hover:border-ink"
+      className="group relative flex min-h-[214px] flex-col justify-between rounded-[10px] border border-line bg-white p-6 transition-all duration-200 hover:border-brand/70 hover:shadow-md"
     >
       <div className="flex items-start justify-between">
-        <span className="font-mono text-[11px] tabular-nums text-muted">
+        <span className="font-mono text-[12px] font-semibold tabular-nums text-brand/85 transition-colors group-hover:text-brand">
           {String(index).padStart(2, "0")}
         </span>
         <ArrowUpRight className="h-4 w-4 text-muted transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand" />

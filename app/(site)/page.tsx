@@ -51,42 +51,101 @@ export default async function HomePage() {
       ) : null}
 
       {/* Main Hero Header */}
-      <section className="border-b border-line bg-gradient-to-b from-surface/50 to-white">
-        <div className="container-page py-10 md:py-14">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-2.5">
-              <span className={cn("h-2 w-2 rounded-full", STATUS_STYLES[settings.recruitment_status])} />
-              <p className="eyebrow text-muted text-[11px]">
-                {isOpen ? "Now Hiring" : "Recruitment Update"} · {settings.portal_location}
+      <section className="relative overflow-hidden border-b border-line bg-white brand-pattern">
+        <div className="container-page py-12 md:py-16 lg:py-20">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-2.5">
+                <span className={cn("h-2 w-2 rounded-full", STATUS_STYLES[settings.recruitment_status])} />
+                <p className="eyebrow text-brand text-[11px] font-semibold tracking-[0.18em]">
+                  {isOpen ? "MALATI GROUP · NOW HIRING" : "MALATI GROUP · UPDATE"} · {settings.portal_location}
+                </p>
+              </div>
+
+              <h1 className="display mt-4 text-[38px] text-ink sm:text-[48px] md:text-[56px] leading-[1.08] tracking-[-0.035em]">
+                {settings.hero_heading}
+              </h1>
+
+              <p className="mt-5 text-[16px] leading-relaxed text-muted md:text-[18px]">
+                {settings.hero_subheading}
               </p>
+
+              {settings.hero_support ? (
+                <p className="mt-3 text-[14px] leading-relaxed text-muted/80">
+                  {settings.hero_support}
+                </p>
+              ) : null}
+
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <a
+                  href="#positions"
+                  className="btn btn-primary min-h-[46px] px-6 text-[13px] font-semibold tracking-wide"
+                >
+                  View Open Positions
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <Link
+                  href="/departments"
+                  className="btn btn-outline min-h-[46px] px-5 text-[13px] font-semibold tracking-wide"
+                >
+                  Explore Departments
+                </Link>
+              </div>
+
+              {/* Quick highlight points */}
+              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line/80 pt-6 text-[12.5px] text-muted">
+                <span className="flex items-center gap-1.5 font-medium text-ink">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+                  {positions.length} Open Positions
+                </span>
+                <span className="flex items-center gap-1.5 font-medium text-ink">
+                  <Building2 className="h-3.5 w-3.5 text-brand" />
+                  {departments.length} Departments
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-[#17694a]" />
+                  {settings.hero_tag1 || "No Account Required"}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 text-muted" />
+                  {settings.hero_tag2 || "Apply in 2 Minutes"}
+                </span>
+              </div>
             </div>
 
-            <h1 className="display mt-4 text-[38px] text-ink sm:text-[48px] md:text-[56px] leading-[1.08]">
-              {settings.hero_heading}
-            </h1>
-
-            <p className="mt-4 text-[16px] leading-relaxed text-muted md:text-[18px]">
-              {settings.hero_subheading}
-            </p>
-
-            {/* Quick highlight points */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12.5px] text-muted">
-              <span className="flex items-center gap-1.5 font-medium text-ink">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-                {positions.length} Open Positions
-              </span>
-              <span className="flex items-center gap-1.5 font-medium text-ink">
-                <Building2 className="h-3.5 w-3.5 text-muted" />
-                {departments.length} Departments
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#1a7f4b]" />
-                {settings.hero_tag1 || "No Account Required"}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-muted" />
-                {settings.hero_tag2 || "Apply in 2 Minutes"}
-              </span>
+            {/* Industrial Precision Graphic Card */}
+            <div className="hidden lg:col-span-5 lg:block">
+              <div className="relative mx-auto max-w-[420px]">
+                <div className="absolute -top-3 -right-3 h-24 w-24 border-t-2 border-r-2 border-brand/40 pointer-events-none" />
+                <div className="overflow-hidden rounded-[12px] border border-line bg-surface shadow-lg">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-ink">
+                    <img
+                      src="/brand/industrial-precision.webp"
+                      alt="Malati Group Precision Engineering"
+                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <span className="eyebrow text-white/90 tracking-[0.2em] text-[10px]">
+                        Industrial Precision × Foundry
+                      </span>
+                      <p className="mt-1 text-[15px] font-semibold text-white">
+                        Engineered for High-Duty Performance
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-5 bg-white">
+                    <div className="flex items-center justify-between text-[11px] text-muted uppercase tracking-[0.14em]">
+                      <span>Direct HR Review</span>
+                      <span className="font-semibold text-brand">Zero Friction</span>
+                    </div>
+                    <p className="mt-2 text-[12.5px] leading-relaxed text-muted">
+                      Join an established engineering & manufacturing team with direct access to career advancement.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -141,52 +200,52 @@ export default async function HomePage() {
       </section>
 
       {/* Fast 3-Step Process */}
-      <section className="border-t border-line">
-        <div className="container-page py-10 md:py-12">
+      <section className="border-t border-line bg-surface/50">
+        <div className="container-page py-12 md:py-16">
+          <div className="mb-8">
+            <p className="eyebrow text-brand">Zero-Friction Recruitment</p>
+            <h2 className="mt-1 text-[22px] font-semibold tracking-[-0.02em] text-ink md:text-[26px]">
+              How Candidates Apply
+            </h2>
+          </div>
           <div className="grid gap-6 md:grid-cols-3">
-            <div className="flex items-start gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-semibold text-white">
-                1
+            <div className="rounded-[10px] border border-line bg-white p-6 shadow-xs">
+              <span className="font-mono text-[20px] font-bold text-brand">
+                01
               </span>
-              <div>
-                <h3 className="text-[14px] font-semibold text-ink">
-                  {settings.process_step1_title || "Find Your Position"}
-                </h3>
-                <p className="mt-1 text-[12px] leading-5 text-muted">
-                  {settings.process_step1_desc ||
-                    "Explore roles across foundry, machining, quality, and administrative teams."}
-                </p>
-              </div>
+              <h3 className="mt-3 text-[15px] font-semibold text-ink">
+                {settings.process_step1_title || "Find Your Position"}
+              </h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted">
+                {settings.process_step1_desc ||
+                  "Explore roles across foundry, machining, quality, and administrative teams."}
+              </p>
             </div>
 
-            <div className="flex items-start gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-semibold text-white">
-                2
+            <div className="rounded-[10px] border border-line bg-white p-6 shadow-xs">
+              <span className="font-mono text-[20px] font-bold text-brand">
+                02
               </span>
-              <div>
-                <h3 className="text-[14px] font-semibold text-ink">
-                  {settings.process_step2_title || "Quick Online Application"}
-                </h3>
-                <p className="mt-1 text-[12px] leading-5 text-muted">
-                  {settings.process_step2_desc ||
-                    "Complete the short form on any phone or desktop and attach your CV."}
-                </p>
-              </div>
+              <h3 className="mt-3 text-[15px] font-semibold text-ink">
+                {settings.process_step2_title || "Quick Online Application"}
+              </h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted">
+                {settings.process_step2_desc ||
+                  "Complete the short form on any phone or desktop and attach your CV."}
+              </p>
             </div>
 
-            <div className="flex items-start gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-semibold text-white">
-                3
+            <div className="rounded-[10px] border border-line bg-white p-6 shadow-xs">
+              <span className="font-mono text-[20px] font-bold text-brand">
+                03
               </span>
-              <div>
-                <h3 className="text-[14px] font-semibold text-ink">
-                  {settings.process_step3_title || "Direct Review by HR"}
-                </h3>
-                <p className="mt-1 text-[12px] leading-5 text-muted">
-                  {settings.process_step3_desc ||
-                    "Every submission goes straight to the Malati Group recruitment desk for interview scheduling."}
-                </p>
-              </div>
+              <h3 className="mt-3 text-[15px] font-semibold text-ink">
+                {settings.process_step3_title || "Direct Review by HR"}
+              </h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted">
+                {settings.process_step3_desc ||
+                  "Every submission goes straight to the Malati Group recruitment desk for interview scheduling."}
+              </p>
             </div>
           </div>
         </div>
@@ -207,16 +266,16 @@ export default async function HomePage() {
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <a
               href={`mailto:${settings.contact_email}`}
-              className="inline-flex items-center gap-1.5 font-medium text-ink hover:text-brand"
+              className="inline-flex items-center gap-1.5 font-medium text-ink transition-colors hover:text-brand"
             >
-              <Mail className="h-4 w-4 text-muted" />
+              <Mail className="h-4 w-4 text-brand" />
               {settings.contact_email}
             </a>
             <a
               href={`tel:${settings.contact_phone.replace(/\s+/g, "")}`}
-              className="inline-flex items-center gap-1.5 font-medium text-ink hover:text-brand"
+              className="inline-flex items-center gap-1.5 font-medium text-ink transition-colors hover:text-brand"
             >
-              <Phone className="h-4 w-4 text-muted" />
+              <Phone className="h-4 w-4 text-brand" />
               {settings.contact_phone}
             </a>
           </div>

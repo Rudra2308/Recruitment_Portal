@@ -452,41 +452,44 @@ export function ApplicationForm({
                 </button>
               </div>
             ) : (
-              <label
-                htmlFor={`field-${field.key}`}
-                className={cn(
-                  "flex cursor-pointer flex-col items-center justify-center border border-dashed px-6 py-8 text-center transition-colors",
-                  error ? "border-brand" : "border-line hover:border-ink",
-                )}
-              >
-                <UploadCloud className="h-6 w-6 text-muted" />
-                <span className="mt-3 text-[13px] font-medium">Choose a file</span>
-                <span className="mt-1 text-[11px] text-muted">
-                  PDF, DOC or DOCX · up to {cvMaxMb} MB
-                </span>
-                <a
-                  href="/demo-cv.pdf"
-                  download="demo-cv.pdf"
-                  className="mt-2 text-[11px] text-brand underline underline-offset-2 hover:opacity-80"
-                  onClick={(e) => e.stopPropagation()}
+              <div>
+                <label
+                  htmlFor={`field-${field.key}`}
+                  className={cn(
+                    "flex cursor-pointer flex-col items-center justify-center border border-dashed px-6 py-8 text-center transition-colors",
+                    error ? "border-brand" : "border-line hover:border-ink",
+                  )}
                 >
-                  Download sample demo CV (PDF)
-                </a>
-                <input
-                  id={`field-${field.key}`}
-                  name={field.key}
-                  type="file"
-                  accept={cvAccept}
-                  className="sr-only"
-                  onChange={(event) => {
-                    const selected = event.target.files?.[0] ?? null;
-                    setFile(selected);
-                    setValue(field, selected?.name ?? "");
-                  }}
-                  aria-invalid={Boolean(error)}
-                  aria-describedby={describedBy || undefined}
-                />
-              </label>
+                  <UploadCloud className="h-6 w-6 text-muted" />
+                  <span className="mt-3 text-[13px] font-medium">Choose a file</span>
+                  <span className="mt-1 text-[11px] text-muted">
+                    PDF, DOC or DOCX · up to {cvMaxMb} MB
+                  </span>
+                  <input
+                    id={`field-${field.key}`}
+                    name={field.key}
+                    type="file"
+                    accept={cvAccept}
+                    className="sr-only"
+                    onChange={(event) => {
+                      const selected = event.target.files?.[0] ?? null;
+                      setFile(selected);
+                      setValue(field, selected?.name ?? "");
+                    }}
+                    aria-invalid={Boolean(error)}
+                    aria-describedby={describedBy || undefined}
+                  />
+                </label>
+                <div className="mt-2 text-center">
+                  <a
+                    href="/demo-cv.pdf"
+                    download="demo-cv.pdf"
+                    className="text-[11px] text-brand underline underline-offset-2 hover:opacity-80"
+                  >
+                    Need a sample CV for testing? Download demo CV (PDF)
+                  </a>
+                </div>
+              </div>
             )}
           </div>
         ) : (

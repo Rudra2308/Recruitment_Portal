@@ -45,6 +45,45 @@ export async function uploadCv(file: File): Promise<UploadedCv> {
     );
   }
   const buffer = Buffer.from(await file.arrayBuffer());
+
+  // If a Google Apps Script Web App URL is configured, route upload through it.
+  // This bypasses personal @gmail.com Drive quota restrictions for Service Accounts.
+  const appsScriptUrl = (process.env.GOOGLE_APPS_SCRIPT_URL ?? "").trim();
+  if (appsScriptUrl) {
+    try {
+      const base64 = buffer.toString("base64");
+      const res = await fetch(appsScriptUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename,
+          mimeType: file.type || "application/pdf",
+          folderId,
+          base64,
+        }),
+        redirect: "follow",
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        fileId?: string;
+        filename?: string;
+        error?: string;
+      };
+      if (data.ok && data.fileId) {
+        return { fileId: data.fileId, filename: data.filename || filename };
+      }
+      console.warn(
+        "[Google Drive] Apps Script webhook error, trying direct API:",
+        data.error,
+      );
+    } catch (webhookError) {
+      console.warn(
+        "[Google Drive] Apps Script webhook failed, trying direct API:",
+        webhookError,
+      );
+    }
+  }
+
   const drive = getDriveClient();
 
   try {
@@ -74,11 +113,20 @@ export async function uploadCv(file: File): Promise<UploadedCv> {
         ? String(((error as { cause: { message?: unknown } }).cause)?.message)
         : "");
 
-    // Personal Google Drives do not grant storage quota to service accounts.
-    // Fall back to local persistent upload so the candidate's application is not lost.
-    if (message.includes("Service Accounts do not have storage quota")) {
+    const isQuotaOrPermError =
+      message.includes("Service Accounts do not have storage quota") ||
+      message.includes("storage quota") ||
+      message.includes("insufficient permissions") ||
+      message.includes("The caller does not have permission") ||
+      message.includes("File not found") ||
+      message.includes("notFound");
+
+    // Personal Google Drives do not grant storage quota to service accounts,
+    // or ownership transfer / folder renames may restrict direct API upload.
+    // Fall back to persistent upload storage so the candidate's application is never lost.
+    if (isQuotaOrPermError) {
       console.warn(
-        "[Google Drive] Personal drive detected (Service accounts require a Google Workspace Shared Drive for cloud quota). Saving CV to local upload storage.",
+        `[Google Drive] Direct API upload unavailable (${message}). Saving CV to local upload storage fallback.`,
       );
       const directory = localUploadDirectory();
       await mkdir(directory, { recursive: true });

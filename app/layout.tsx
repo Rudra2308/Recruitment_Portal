@@ -57,11 +57,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/brand/favicon-64x64.png", sizes: "64x64", type: "image/png" },
+      { url: "/careers/favicon.ico", sizes: "any" },
+      { url: "/careers/brand/favicon-64x64.png", sizes: "64x64", type: "image/png" },
     ],
     apple: [
-      { url: "/brand/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/careers/brand/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
 };

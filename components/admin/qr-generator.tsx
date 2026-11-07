@@ -24,8 +24,8 @@ export function QrGenerator({
 
   const selectedTarget = targets.find((t) => t.path === selectedPath) ?? targets[0];
   const fullUrl = `${baseUrl.replace(/\/$/, "")}${selectedPath}`;
-  const qrApiUrl = `/api/qr?data=${encodeURIComponent(fullUrl)}&size=${size}`;
-  const downloadUrl = `/api/qr?data=${encodeURIComponent(fullUrl)}&size=${size}&download=1`;
+  const qrApiUrl = `/careers/api/qr?data=${encodeURIComponent(fullUrl)}&size=${size}`;
+  const downloadUrl = `/careers/api/qr?data=${encodeURIComponent(fullUrl)}&size=${size}&download=1`;
 
   // Group targets
   const grouped: Record<string, TargetOption[]> = {};

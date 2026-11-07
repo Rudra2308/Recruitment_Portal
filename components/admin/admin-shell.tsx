@@ -153,7 +153,7 @@ function SidebarContent({
           <p className="mt-0.5 text-[10px] text-muted">Signed in as administrator</p>
         </div>
 
-        <form action="/api/admin/logout" method="post" className="mt-2.5">
+        <form action="/careers/api/admin/logout" method="post" className="mt-2.5">
           <button
             type="submit"
             className="flex min-h-9 w-full items-center gap-2 border border-line px-2.5 py-1.5 text-[11px] font-medium text-muted transition-colors hover:border-ink hover:text-ink"

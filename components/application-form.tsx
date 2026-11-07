@@ -160,10 +160,21 @@ export function ApplicationForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [globalError, setGlobalError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
 
   const current = steps[Math.min(stepIndex, steps.length - 1)];
   const isReview = current.key === "Review";
+  const isStepBeforeReview = stepIndex === steps.length - 2;
   const progress = ((stepIndex + 1) / steps.length) * 100;
+
+  useEffect(() => {
+    if (isReview) {
+      const timer = window.setTimeout(() => setCanSubmit(true), 350);
+      return () => window.clearTimeout(timer);
+    } else {
+      setCanSubmit(false);
+    }
+  }, [isReview]);
 
   useEffect(() => {
     const form = document.getElementById("application-form-start");
@@ -258,7 +269,14 @@ export function ApplicationForm({
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (preview || submitting) return;
+
+    // Guard: Only allow submission from the Review step
+    if (!isReview) {
+      goNext();
+      return;
+    }
+
+    if (preview || submitting || !canSubmit) return;
 
     const allErrors: FormErrors = {};
     for (const step of steps) {
@@ -304,7 +322,7 @@ export function ApplicationForm({
     }
 
     try {
-      const response = await fetch("/api/applications", {
+      const response = await fetch("/careers/api/applications", {
         method: "POST",
         body: formData,
       });
@@ -522,7 +540,7 @@ export function ApplicationForm({
                 </label>
                 <div className="mt-2 text-center">
                   <a
-                    href="/demo-cv.pdf"
+                    href="/careers/demo-cv.pdf"
                     download="demo-cv.pdf"
                     className="text-[11px] text-brand underline underline-offset-2 hover:opacity-80"
                   >
@@ -621,7 +639,21 @@ export function ApplicationForm({
           </div>
         </div>
 
-        <form ref={formRef} onSubmit={handleSubmit} noValidate>
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          onKeyDown={(event) => {
+            if (
+              event.key === "Enter" &&
+              !isReview &&
+              (event.target as HTMLElement).tagName !== "TEXTAREA"
+            ) {
+              event.preventDefault();
+              goNext();
+            }
+          }}
+          noValidate
+        >
           <div className="px-5 py-7 md:px-7 md:py-8">
             <h2 className="text-[24px] font-semibold tracking-[-0.025em]">
               {isReview ? "Review your application" : current.title}
@@ -641,6 +673,15 @@ export function ApplicationForm({
 
             {isReview ? (
               <div className="mt-7 space-y-8">
+                <div className="rounded-[8px] border border-line bg-surface/60 p-4 text-[12.5px] text-muted">
+                  <p className="font-semibold text-ink">
+                    Please review your application details below.
+                  </p>
+                  <p className="mt-1 text-[12px] text-muted">
+                    If any detail needs correction, click &ldquo;Edit&rdquo; next to that section. Once you are satisfied, click &ldquo;Submit application&rdquo; at the bottom to complete your submission.
+                  </p>
+                </div>
+
                 {steps
                   .filter((step) => step.key !== "Review" && step.fields.length)
                   .map((step) => (
@@ -706,9 +747,10 @@ export function ApplicationForm({
 
             {isReview ? (
               <button
+                key="submit-application-btn"
                 type="submit"
-                disabled={submitting || preview}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[6px] bg-brand px-6 text-[13px] font-medium text-white transition-colors hover:bg-brand-dark disabled:pointer-events-none disabled:opacity-50"
+                disabled={submitting || preview || !canSubmit}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[6px] bg-brand px-6 text-[13px] font-semibold text-white transition-colors hover:bg-brand-dark disabled:pointer-events-none disabled:opacity-50"
               >
                 {submitting ? (
                   <>
@@ -724,11 +766,12 @@ export function ApplicationForm({
               </button>
             ) : (
               <button
+                key="continue-step-btn"
                 type="button"
                 onClick={goNext}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[6px] bg-ink px-6 text-[13px] font-medium text-white transition-colors hover:bg-black"
               >
-                Continue
+                {isStepBeforeReview ? "Review application" : "Continue"}
                 <ArrowRight className="h-4 w-4" />
               </button>
             )}

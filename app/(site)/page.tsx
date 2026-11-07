@@ -121,7 +121,7 @@ export default async function HomePage() {
                 <div className="overflow-hidden rounded-[12px] border border-line bg-surface shadow-lg">
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-ink">
                     <img
-                      src="/brand/industrial-precision.webp"
+                      src="/careers/brand/industrial-precision.webp"
                       alt="Malati Group Precision Engineering"
                       className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                     />

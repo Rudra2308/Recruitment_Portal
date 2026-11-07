@@ -156,7 +156,7 @@ export default async function AdminApplicantsPage({
                   <td>
                     {application.cv_file_id ? (
                       <a
-                        href={`/api/admin/applications/${application.id}/cv`}
+                        href={`/careers/api/admin/applications/${application.id}/cv`}
                         className="inline-flex min-h-7 items-center gap-1 border border-line px-2 text-[10px] font-medium transition-colors hover:border-ink"
                       >
                         <FileText className="h-3 w-3" />

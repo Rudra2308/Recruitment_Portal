@@ -12,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/admin/*", "/api/*", "/mgmt-portal", "/apply/success"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${baseUrl}/careers/sitemap.xml`,
   };
 }

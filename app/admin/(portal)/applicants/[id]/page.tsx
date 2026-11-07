@@ -130,7 +130,7 @@ export default async function ApplicantDetailPage({
             </Link>
             {application.cv_file_id ? (
               <a
-                href={`/api/admin/applications/${application.id}/cv`}
+                href={`/careers/api/admin/applications/${application.id}/cv`}
                 className="btn btn-secondary btn-sm"
               >
                 <Download className="h-3.5 w-3.5" />
@@ -343,7 +343,7 @@ export default async function ApplicantDetailPage({
                   </div>
                 </div>
                 <a
-                  href={`/api/admin/applications/${application.id}/cv`}
+                  href={`/careers/api/admin/applications/${application.id}/cv`}
                   className="mt-3 inline-flex min-h-9 w-full items-center justify-center gap-1.5 border border-ink bg-ink px-3 text-[11px] font-medium text-white transition-colors hover:bg-black"
                 >
                   <Download className="h-3.5 w-3.5" />

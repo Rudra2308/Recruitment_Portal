@@ -29,41 +29,41 @@ export default async function AdminLoginPage({
 
   return (
     <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-ink p-10 text-white lg:flex xl:p-14">
-        <div className="absolute inset-y-0 right-0 w-px bg-white/10" />
-        <div className="absolute -right-24 top-1/3 h-[360px] w-[360px] rounded-full border border-white/10" />
-        <div className="absolute -right-10 top-1/3 h-[220px] w-[220px] rounded-full border border-white/10" />
+      <section className="relative hidden flex-col justify-between overflow-hidden border-r border-line bg-surface p-10 text-ink lg:flex xl:p-14 brand-pattern">
+        <div className="absolute inset-y-0 right-0 w-px bg-line" />
+        <div className="absolute -right-24 top-1/3 h-[360px] w-[360px] rounded-full border border-line/80 pointer-events-none" />
+        <div className="absolute -right-10 top-1/3 h-[220px] w-[220px] rounded-full border border-line/80 pointer-events-none" />
 
-        <Wordmark tone="light" />
+        <Wordmark size="lg" />
 
         <div className="relative max-w-lg">
-          <p className="eyebrow text-white/45">Recruitment administration</p>
-          <h1 className="mt-5 text-[42px] font-semibold leading-[1.08] tracking-[-0.035em] xl:text-[52px]">
+          <p className="eyebrow text-brand">Recruitment administration</p>
+          <h1 className="mt-5 text-[40px] font-semibold leading-[1.08] tracking-[-0.035em] text-ink xl:text-[48px]">
             One place to run recruitment.
           </h1>
-          <p className="mt-5 max-w-md text-[14px] leading-7 text-white/55">
+          <p className="mt-4 max-w-md text-[14px] leading-7 text-muted">
             Manage positions, review applications, configure the form and keep
             every candidate record in one auditable system.
           </p>
 
-          <ul className="mt-9 space-y-3 text-[13px] text-white/65">
+          <ul className="mt-8 space-y-3.5 text-[13px] text-ink">
             {[
               "Job and department management",
               "Configurable application forms",
               "Secure CV access and audit history",
             ].map((item) => (
               <li key={item} className="flex items-center gap-3">
-                <span className="flex h-5 w-5 items-center justify-center border border-white/15">
-                  <Check className="h-3 w-3 text-white/70" />
+                <span className="flex h-5 w-5 items-center justify-center rounded-[4px] border border-line bg-white shadow-xs">
+                  <Check className="h-3 w-3 text-brand" />
                 </span>
-                {item}
+                <span className="font-medium text-ink">{item}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative text-[10px] uppercase tracking-[0.16em] text-white/30">
-          Malati Group · Recruitment Portal V4
+        <p className="relative text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
+          Malati Group · Recruitment Portal
         </p>
       </section>
 

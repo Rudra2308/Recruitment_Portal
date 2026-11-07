@@ -1065,58 +1065,51 @@ orange brand color.
 
 ------------------------------------------------------------------------
 
-# 30. Dark Sections
+# 30. Structural Surface System & Contrast
 
-Dark sections are allowed and should provide contrast against the white
-majority.
+Rather than heavy pitch-black or dark charcoal blocks, the interface maintains an airy, high-precision engineering aesthetic across all structural zones.
 
-Use:
+Light architectural grey (`--color-surface: #F7F7F5`) is used for:
+- candidate portal footer (bordered with thin neutral `--color-line: #E5E5E5`)
+- admin authentication hero panel
+- secondary card surfaces and process steps
+- alternating data tables
 
-``` css
-background: #171717;
-color: #FFFFFF;
-```
-
-Orange remains the accent.
-
-Ideal locations:
-
--   footer
--   manufacturing statement
--   major CTA section
--   selected capability section
--   company positioning statement
-
-Avoid making the entire website dark.
+This ensures that:
+- Malati Orange (`#F4512A`) accents, badges, and icons pop with clarity and intention.
+- Dark ink (`#171717`) is reserved for authoritative typography, metrics, and sharp borders rather than overwhelming dark background blocks.
+- The entire portal feels light, engineered, modern, and unified.
 
 ------------------------------------------------------------------------
 
 # 31. Footer
 
-Footer should feel substantial but clean.
+The footer feels clean, structured, and architectural rather than heavy.
 
 Suggested structure:
 
 ``` text
-MALATI GROUP
+MALATI GROUP (Orange Mark + Wordmark)
 
-Engineering precision.
-Manufacturing capability.
+Industrial Precision × Modern Engineering.
 
-Company
-Capabilities
-Industries
-Careers
-Contact
+Explore                  Contact
+Open positions           Email
+Departments              Phone
+Admin                    Location
 
 --------------------------------
 
-© Malati Group
-Privacy
-Terms
+© Malati Group · All rights reserved.
 ```
 
-Use a dark charcoal background with orange micro-accents.
+Treatment:
+- **Background:** Light architectural surface (`#F7F7F5` / `--color-surface`)
+- **Top & Divider Borders:** Thin neutral line (`#E5E5E5` / `--color-line`)
+- **Brand Identifier:** Official Malati Orange mark with ink typography (`Wordmark`)
+- **Eyebrows & Icons:** Malati Orange (`#F4512A`)
+- **Typography:** Ink (`#171717`) for primary labels, Muted (`#6B6B6B`) for supporting links with orange hover
+- **Bottom Bar:** Clean white tint (`rgba(255, 255, 255, 0.70)`) with muted copyright
 
 ------------------------------------------------------------------------
 

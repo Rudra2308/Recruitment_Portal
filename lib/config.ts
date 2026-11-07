@@ -226,8 +226,8 @@ export function getBaseUrl(): string {
 }
 
 export function absoluteUrl(path = "/"): string {
-  const base = getBaseUrl();
-  if (!path) return base;
+  const base = `${getBaseUrl()}/careers`;
+  if (!path || path === "/") return base;
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 

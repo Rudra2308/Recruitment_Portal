@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   if (!isSameOrigin(request)) {
     return NextResponse.json({ error: "Invalid request." }, { status: 403 });
   }
-  const response = NextResponse.redirect(new URL(LOGIN_PATH, request.url), 303);
+  const response = NextResponse.redirect(new URL("/careers" + LOGIN_PATH, request.url), 303);
   response.cookies.set(SESSION_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",

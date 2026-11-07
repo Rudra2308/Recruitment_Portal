@@ -20,8 +20,8 @@ export function Wordmark({
 }: WordmarkProps) {
   const isLight = tone === "light";
   const markSrc = isLight
-    ? "/brand/malati-mark-white-header.png"
-    : "/brand/malati-mark-header.png";
+    ? "/careers/brand/malati-mark-white-header.png"
+    : "/careers/brand/malati-mark-header.png";
 
   const dimensions = {
     sm: { width: 44, height: 27 },

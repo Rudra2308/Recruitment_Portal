@@ -152,7 +152,7 @@ export function BulkDownloadManager({
         all: selectedIds.size === totalWithCv && totalWithCv > 0,
       };
 
-      const response = await fetch("/api/admin/applications/bulk-download", {
+      const response = await fetch("/careers/api/admin/applications/bulk-download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -474,7 +474,7 @@ export function BulkDownloadManager({
                     <td className="text-right">
                       {hasCv ? (
                         <a
-                          href={`/api/admin/applications/${app.id}/cv`}
+                          href={`/careers/api/admin/applications/${app.id}/cv`}
                           target="_blank"
                           rel="noreferrer"
                           title="Download single CV"

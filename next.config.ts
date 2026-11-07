@@ -11,12 +11,23 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  basePath: "/careers",
   poweredByHeader: false,
   serverExternalPackages: ["googleapis", "nodemailer", "bcryptjs"],
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+  },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/careers",
+        basePath: false,
+        permanent: false,
+      },
+    ];
   },
   async headers() {
     return [

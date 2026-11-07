@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ["googleapis", "nodemailer", "bcryptjs"],
   experimental: {
+    optimizePackageImports: ["lucide-react"],
     serverActions: {
       bodySizeLimit: "10mb",
     },
@@ -24,6 +25,48 @@ const nextConfig: NextConfig = {
       {
         source: "/",
         destination: "/careers",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/admin",
+        destination: "/careers/admin",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/admin/:path*",
+        destination: "/careers/admin/:path*",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/jobs",
+        destination: "/careers/jobs",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/jobs/:path*",
+        destination: "/careers/jobs/:path*",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/departments",
+        destination: "/careers/departments",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/departments/:path*",
+        destination: "/careers/departments/:path*",
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: "/apply/:path*",
+        destination: "/careers/apply/:path*",
         basePath: false,
         permanent: false,
       },

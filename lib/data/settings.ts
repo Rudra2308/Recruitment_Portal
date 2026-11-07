@@ -1,10 +1,12 @@
+import { cache } from "react";
+
 import { DEFAULT_SETTINGS } from "@/lib/defaults";
 import { getStore } from "@/lib/data";
 import type { RecruitmentStatus, Settings } from "@/lib/types";
 
 const VALID_STATUSES: RecruitmentStatus[] = ["OPEN", "PAUSED", "CLOSED"];
 
-export async function getSettings(): Promise<Settings> {
+export const getSettings = cache(async function getSettings(): Promise<Settings> {
   const store = await getStore();
   const raw = await store.getSettings();
   const merged: Settings = { ...DEFAULT_SETTINGS };
@@ -18,7 +20,7 @@ export async function getSettings(): Promise<Settings> {
   }
 
   return merged;
-}
+});
 
 export async function updateSettings(
   patch: Partial<Record<keyof Settings, string>>,

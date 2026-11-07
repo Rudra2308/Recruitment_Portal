@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -118,7 +117,6 @@ export function ApplicationForm({
   cvMaxMb: number;
   preview?: boolean;
 }) {
-  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const honeypotRef = useRef<HTMLInputElement>(null);
   const maxBytes = cvMaxMb * 1024 * 1024;
@@ -352,12 +350,12 @@ export function ApplicationForm({
       }
 
       const reference = payload.applicationId ?? "";
-      router.push(`/apply/success?ref=${encodeURIComponent(reference)}`);
+      const successUrl = `/careers/apply/success?ref=${encodeURIComponent(reference)}`;
+      window.location.assign(successUrl);
     } catch {
       setGlobalError(
         "We could not reach the server. Check your connection and try again.",
       );
-    } finally {
       setSubmitting(false);
     }
   }

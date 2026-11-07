@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { getStore } from "@/lib/data";
 import { moveOrdered } from "@/lib/data/departments";
 import type { Row } from "@/lib/data/store";
@@ -145,27 +147,27 @@ function parseStatus(row: Row): ApplicationStatus {
   };
 }
 
-export async function getAllFormFields(): Promise<FormField[]> {
+export const getAllFormFields = cache(async function getAllFormFields(): Promise<FormField[]> {
   const store = await getStore();
   const rows = await store.list("FORM_FIELDS");
   return rows
     .map(parseField)
     .filter((field) => field.id && field.key)
     .sort((a, b) => a.display_order - b.display_order);
-}
+});
 
-export async function getFormFieldById(id: string): Promise<FormField | null> {
+export const getFormFieldById = cache(async function getFormFieldById(id: string): Promise<FormField | null> {
   return (await getAllFormFields()).find((field) => field.id === id) ?? null;
-}
+});
 
-export async function getAllFormOptions(): Promise<FormOption[]> {
+export const getAllFormOptions = cache(async function getAllFormOptions(): Promise<FormOption[]> {
   const store = await getStore();
   const rows = await store.list("FORM_OPTIONS");
   return rows
     .map(parseOption)
     .filter((option) => option.id && option.field_id)
     .sort((a, b) => a.display_order - b.display_order);
-}
+});
 
 export async function getOptionsForField(fieldId: string): Promise<FormOption[]> {
   return (await getAllFormOptions()).filter(
@@ -173,16 +175,16 @@ export async function getOptionsForField(fieldId: string): Promise<FormOption[]>
   );
 }
 
-export async function getAllJobDetails(): Promise<JobDetail[]> {
+export const getAllJobDetails = cache(async function getAllJobDetails(): Promise<JobDetail[]> {
   const store = await getStore();
   const rows = await store.list("JOB_DETAILS");
   return rows
     .map(parseJobDetail)
     .filter((detail) => detail.id && detail.position_id)
     .sort((a, b) => a.display_order - b.display_order);
-}
+});
 
-export async function getJobDetailsForPosition(
+export const getJobDetailsForPosition = cache(async function getJobDetailsForPosition(
   positionId: string,
   options: { includeHidden?: boolean } = {},
 ): Promise<JobDetail[]> {
@@ -191,24 +193,24 @@ export async function getJobDetailsForPosition(
     .filter((detail) => detail.position_id === positionId && detail.active)
     .filter((detail) => options.includeHidden || detail.visible)
     .sort((a, b) => a.display_order - b.display_order);
-}
+});
 
-export async function getAllStatuses(): Promise<ApplicationStatus[]> {
+export const getAllStatuses = cache(async function getAllStatuses(): Promise<ApplicationStatus[]> {
   const store = await getStore();
   const rows = await store.list("APPLICATION_STATUSES");
   return rows
     .map(parseStatus)
     .filter((status) => status.id && status.name)
     .sort((a, b) => a.display_order - b.display_order);
-}
+});
 
-export async function getActiveStatuses(): Promise<ApplicationStatus[]> {
+export const getActiveStatuses = cache(async function getActiveStatuses(): Promise<ApplicationStatus[]> {
   return (await getAllStatuses()).filter((status) => status.active);
-}
+});
 
 const OVERRIDES_KEY = "job_form_overrides";
 
-export async function getAllJobFormOverrides(): Promise<JobFormOverrides> {
+export const getAllJobFormOverrides = cache(async function getAllJobFormOverrides(): Promise<JobFormOverrides> {
   const store = await getStore();
   const settings = await store.getSettings();
   const parsed = safeJsonParse<JobFormOverrides>(
@@ -216,7 +218,7 @@ export async function getAllJobFormOverrides(): Promise<JobFormOverrides> {
     {},
   );
   return parsed && typeof parsed === "object" ? parsed : {};
-}
+});
 
 export async function getJobFormOverrides(
   jobId: string,
@@ -274,7 +276,7 @@ export async function clearJobFormOverrides(jobId: string): Promise<void> {
  * job-level overrides. Required/visible are evaluated together: hiding a field
  * always removes its required validation.
  */
-export async function resolveFormFields(
+export const resolveFormFields = cache(async function resolveFormFields(
   jobId: string,
   options: { includeHidden?: boolean } = {},
 ): Promise<ResolvedField[]> {
@@ -317,7 +319,7 @@ export async function resolveFormFields(
   }
 
   return resolved;
-}
+});
 
 export async function createFormField(input: {
   key: string;

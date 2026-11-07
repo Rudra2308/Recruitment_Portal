@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { getStore } from "@/lib/data";
 import {
   clearJobFormOverrides,
@@ -49,7 +51,7 @@ function parsePosition(row: Row): Position {
   };
 }
 
-export async function getAllPositions(): Promise<Position[]> {
+export const getAllPositions = cache(async function getAllPositions(): Promise<Position[]> {
   const store = await getStore();
   const rows = await store.list("POSITIONS");
   return rows
@@ -59,11 +61,11 @@ export async function getAllPositions(): Promise<Position[]> {
       (a, b) =>
         a.display_order - b.display_order || a.title.localeCompare(b.title),
     );
-}
+});
 
-export async function getPositionById(id: string): Promise<Position | null> {
+export const getPositionById = cache(async function getPositionById(id: string): Promise<Position | null> {
   return (await getAllPositions()).find((position) => position.id === id) ?? null;
-}
+});
 
 export function isPositionExpired(position: Position): boolean {
   if (!position.deadline) return false;
@@ -88,7 +90,7 @@ function matchesActiveDepartment(
 }
 
 /** Jobs visible on the public site: OPEN, not expired, in an active department. */
-export async function getPublicPositions(): Promise<Position[]> {
+export const getPublicPositions = cache(async function getPublicPositions(): Promise<Position[]> {
   const [positions, departments] = await Promise.all([
     getAllPositions(),
     getAllDepartments(),
@@ -106,9 +108,9 @@ export async function getPublicPositions(): Promise<Position[]> {
       isJobLive(position) &&
       matchesActiveDepartment(position, activeNames, allNames),
   );
-}
+});
 
-export async function getPublicPositionById(
+export const getPublicPositionById = cache(async function getPublicPositionById(
   id: string,
 ): Promise<Position | null> {
   const position = await getPositionById(id);
@@ -119,7 +121,7 @@ export async function getPublicPositionById(
   );
   if (department && !department.active) return null;
   return position;
-}
+});
 
 export async function searchPublicPositions(options: {
   q?: string;
@@ -176,7 +178,7 @@ export async function filterPositionsForAdmin(options: {
   return positions;
 }
 
-export async function getDepartmentJobCounts(): Promise<
+export const getDepartmentJobCounts = cache(async function getDepartmentJobCounts(): Promise<
   Record<string, { open: number; total: number }>
 > {
   const [positions, departments] = await Promise.all([
@@ -196,7 +198,7 @@ export async function getDepartmentJobCounts(): Promise<
     if (isJobLive(position)) counts[department.id].open += 1;
   }
   return counts;
-}
+});
 
 export async function getJobsClosingSoon(limit = 5): Promise<Position[]> {
   const positions = await getPublicPositions();

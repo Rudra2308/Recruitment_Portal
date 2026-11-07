@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { getStore } from "@/lib/data";
 import type { DataStore, Row } from "@/lib/data/store";
 import type { Department } from "@/lib/types";
@@ -13,7 +15,7 @@ function parseDepartment(row: Row): Department {
   };
 }
 
-export async function getAllDepartments(): Promise<Department[]> {
+export const getAllDepartments = cache(async function getAllDepartments(): Promise<Department[]> {
   const store = await getStore();
   const rows = await store.list("DEPARTMENTS");
   return rows
@@ -22,16 +24,16 @@ export async function getAllDepartments(): Promise<Department[]> {
     .sort(
       (a, b) => a.display_order - b.display_order || a.name.localeCompare(b.name),
     );
-}
+});
 
-export async function getActiveDepartments(): Promise<Department[]> {
+export const getActiveDepartments = cache(async function getActiveDepartments(): Promise<Department[]> {
   return (await getAllDepartments()).filter((department) => department.active);
-}
+});
 
-export async function getDepartmentById(id: string): Promise<Department | null> {
+export const getDepartmentById = cache(async function getDepartmentById(id: string): Promise<Department | null> {
   const departments = await getAllDepartments();
   return departments.find((department) => department.id === id) ?? null;
-}
+});
 
 export function departmentSlug(name: string): string {
   return slugify(name);

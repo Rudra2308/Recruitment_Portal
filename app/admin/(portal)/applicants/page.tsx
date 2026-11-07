@@ -57,7 +57,7 @@ export default async function AdminApplicantsPage({
 
       <form
         method="get"
-        action="/admin/applicants"
+        action="/careers/admin/applicants"
         className="admin-card mb-4 grid gap-2 p-4 md:grid-cols-[1fr_220px_180px_auto]"
       >
         <label className="relative block">

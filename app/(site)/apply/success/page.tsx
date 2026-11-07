@@ -89,6 +89,7 @@ export default async function SuccessPage({
         <div className="mt-9 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/jobs"
+            prefetch={false}
             className="inline-flex min-h-11 items-center justify-center gap-2 bg-ink px-5 text-[13px] font-medium text-white transition-colors hover:bg-black"
           >
             Browse other roles
@@ -96,6 +97,7 @@ export default async function SuccessPage({
           </Link>
           <Link
             href="/"
+            prefetch={false}
             className="inline-flex min-h-11 items-center justify-center border border-line px-5 text-[13px] font-medium transition-colors hover:border-ink"
           >
             Back to home

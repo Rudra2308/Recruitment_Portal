@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function SuccessRedirectPage({
   searchParams,
 }: {
-  searchParams: Promise<{ id?: string }>;
+  searchParams: Promise<{ id?: string; ref?: string }>;
 }) {
-  const { id } = await searchParams;
-  redirect(id ? `/apply/success?id=${encodeURIComponent(id)}` : "/apply/success");
+  const params = await searchParams;
+  const ref = params.ref || params.id;
+  redirect(ref ? `/apply/success?ref=${encodeURIComponent(ref)}` : "/apply/success");
 }

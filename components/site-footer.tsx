@@ -47,6 +47,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
               <li>
                 <Link
                   href="/admin"
+                  prefetch={false}
                   className="inline-flex items-center gap-1 text-muted transition-colors hover:text-brand"
                 >
                   Admin <ArrowUpRight className="h-3 w-3" />

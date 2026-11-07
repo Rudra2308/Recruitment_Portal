@@ -35,7 +35,9 @@ export function CandidateJobsBrowser({
   const filteredPositions = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return positions.filter((job) => {
-      const matchesDept = !selectedDept || job.department === selectedDept;
+      const matchesDept =
+        !selectedDept ||
+        job.department.toLowerCase() === selectedDept.toLowerCase();
       const matchesSearch =
         !q ||
         job.title.toLowerCase().includes(q) ||

@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 import {
   getAdminEmail,
@@ -77,10 +78,10 @@ export async function verifySessionToken(
   }
 }
 
-export async function getSession(): Promise<AdminSession | null> {
+export const getSession = cache(async function getSession(): Promise<AdminSession | null> {
   const cookieStore = await cookies();
   return verifySessionToken(cookieStore.get(SESSION_COOKIE)?.value);
-}
+});
 
 /** Redirects unauthenticated visitors; use in protected layouts and actions. */
 export async function requireAdmin(): Promise<AdminSession> {

@@ -71,7 +71,6 @@ export function ActionForm({
     if (!state.ok) return;
     if (state.redirectTo) {
       router.push(state.redirectTo);
-      router.refresh();
       return;
     }
     if (resetOnSuccess) formRef.current?.reset();

@@ -63,7 +63,7 @@ export default async function AdminJobsPage({
 
       <form
         method="get"
-        action="/admin/jobs"
+        action="/careers/admin/jobs"
         className="admin-card mb-4 grid gap-2 p-4 md:grid-cols-[1fr_160px_200px_auto]"
       >
         <label className="relative block">

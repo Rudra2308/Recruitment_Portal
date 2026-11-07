@@ -1,4 +1,5 @@
 import { randomBytes, randomUUID } from "node:crypto";
+import { cache } from "react";
 
 import { getStore } from "@/lib/data";
 import { getAllStatuses } from "@/lib/data/config";
@@ -115,14 +116,14 @@ function parseApplication(row: Row): Application {
   };
 }
 
-async function readApplications(): Promise<Application[]> {
+const readApplications = cache(async function readApplications(): Promise<Application[]> {
   const store = await getStore();
   const [withCv, withoutCv] = await Promise.all([
     store.list("WITH_CV"),
     store.list("WITHOUT_CV"),
   ]);
   return [...withCv, ...withoutCv].map(parseApplication);
-}
+});
 
 export interface CreateApplicationInput {
   position_id: string;
@@ -197,12 +198,12 @@ export async function createApplication(
   return application;
 }
 
-export async function getApplicationById(
+export const getApplicationById = cache(async function getApplicationById(
   id: string,
 ): Promise<Application | null> {
   const applications = await readApplications();
   return applications.find((application) => application.id === id) ?? null;
-}
+});
 
 async function locateApplication(
   id: string,
@@ -371,7 +372,7 @@ export interface ApplicationStats {
   byStatus: Record<string, number>;
 }
 
-export async function getApplicationStats(): Promise<ApplicationStats> {
+export const getApplicationStats = cache(async function getApplicationStats(): Promise<ApplicationStats> {
   const applications = await readApplications();
   const today = todayISO();
   const byStatus: Record<string, number> = {};
@@ -390,7 +391,7 @@ export async function getApplicationStats(): Promise<ApplicationStats> {
     withCv,
     byStatus,
   };
-}
+});
 
 export async function getRecentApplications(
   limit = 6,

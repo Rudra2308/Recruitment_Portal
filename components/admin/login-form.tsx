@@ -1,7 +1,6 @@
 "use client";
 
 import { Eye, EyeOff, Loader2, LockKeyhole } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function LoginForm({
@@ -11,7 +10,6 @@ export function LoginForm({
   next: string;
   defaultEmail?: string;
 }) {
-  const router = useRouter();
   const [email, setEmail] = useState(defaultEmail ?? "");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -38,14 +36,15 @@ export function LoginForm({
 
       if (!response.ok) {
         setError(payload.error ?? "Sign-in failed. Please try again.");
+        setPending(false);
         return;
       }
 
-      router.replace(payload.redirect ?? "/admin");
-      router.refresh();
+      const target = payload.redirect || "/admin";
+      const dest = target.startsWith("/careers") ? target : `/careers${target}`;
+      window.location.href = dest;
     } catch {
       setError("Could not reach the server. Check your connection and try again.");
-    } finally {
       setPending(false);
     }
   }

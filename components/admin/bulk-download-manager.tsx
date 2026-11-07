@@ -94,7 +94,10 @@ export function BulkDownloadManager({
     return filteredApplications.filter((a) => Boolean(a.cv_file_id));
   }, [filteredApplications]);
 
-  const totalWithCv = applications.filter((a) => Boolean(a.cv_file_id)).length;
+  const totalWithCv = useMemo(
+    () => applications.filter((a) => Boolean(a.cv_file_id)).length,
+    [applications],
+  );
 
   const isAllVisibleSelected =
     visibleApplicationsWithCv.length > 0 &&
